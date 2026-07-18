@@ -1,0 +1,89 @@
+# Local workspace artifacts
+.devcontainer/
+.cache
+artifacts/
+output/
+cache/
+tmp/
+build/
+
+# AI files
+**/CLAUDE.md
+**/.claude
+status.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+.tox/
+.nox/
+.ipynb_checkpoints/
+.cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Build and packaging
+build/
+dist/
+site/
+.eggs/
+*.egg-info/
+pip-wheel-metadata/
+
+# Coverage and logs
+.coverage
+.coverage.*
+htmlcov/
+*.log
+
+# LaTeX intermediate and generated files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.nav
+*.out
+*.pdf
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+_minted-*/
+
+# draw.io temporary and backup files
+**/.$*.drawio.bkp
+**/*.drawio.bkp
+**/*.drawio.tmp
+
+# Environment files
+.env
+exp/local.ini
+exp/*.local.ini
+
+# IDE settings
+.vscode/
+.idea/
