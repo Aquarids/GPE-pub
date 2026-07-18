@@ -11,10 +11,17 @@ KnownGraph queries, and evidence retrieval.
 
 ## Setup
 
-Install the package (the datasets are included in the installation):
+Install the package from the tagged GitHub source (the datasets are included):
 
 ```bash
-python -m pip install .
+python -m pip install "gpe-eval @ git+https://github.com/Aquarids/GPE-pub.git@v0.1.0"
+```
+
+To add GPE to another Conda environment, put the following entry under that
+environment's `pip:` dependencies, then run `conda env update -f environment.yml`:
+
+```yaml
+- gpe-eval @ git+https://github.com/Aquarids/GPE-pub.git@v0.1.0
 ```
 
 For development, the existing Conda environment remains available:
