@@ -54,8 +54,30 @@ python exp/run_graph_and_retrieval.py \
 ```
 
 It prints KnownGraph statistics, matching entities, the selected claim's graph
-context, and the top matching benign evidence records. To include poisoned
-evidence in the retrieval results, add `--include-poisoned`.
+context, and the top matching evidence records. Retrieval ranks the full
+corpus, including evidence attached to other claims and poisoned evidence, to
+better model a real retrieval setting.
+
+## Search interfaces
+
+There are two distinct search APIs:
+
+- `EvidenceRetriever.search(...)` retrieves from the bundled evidence corpus.
+  It is global when `claim_id=None` and restricted to one claim when a
+  `claim_id` is supplied. Select `mode="bm25"` for lexical retrieval or
+  `mode="llm"` with an `LLMWrapper` argument for LLM reranking. The LLM mode
+  first uses BM25 to recall candidates, then invokes the
+  `rank_evidence_summaries` retrieval skill to rank only their titles,
+  summaries, and keywords. It does not require or parse free-form JSON output,
+  and it never sends full evidence contents to the LLM.
+- `GPE.search(...)` uses `Searcher` to query external sources (for example,
+  neutral web search, Wikipedia, or site-restricted search). The default
+  `source="web"` submits the caller-provided `query` unchanged; select another
+  source with the optional `source` argument.
+
+The evaluation script's default `dataset` mode is different: it directly uses
+the evidence pre-associated with each claim to provide a controlled evaluation
+condition; it does not run corpus retrieval.
 
 ## Evaluation
 

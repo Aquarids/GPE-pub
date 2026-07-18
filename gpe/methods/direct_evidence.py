@@ -3,7 +3,7 @@ from typing import Any, Dict
 
 from gpe.methods.base import BaseDetector
 from gpe.methods.label_utils import normalize_compare_label
-from gpe.retrieval.search.web_support_search import WebSupportSearch
+from gpe.retrieval.search.web_search import WebSearch
 from gpe.utils.json_utils import extract_json
 
 
@@ -23,14 +23,14 @@ Use uncertain when the supplied evidence is insufficient or highly conflicting.
     def __init__(self, logger, llm, config=None):
         super().__init__(logger, llm, config)
         self.max_urls = int(self.config.get("max_urls", 5))
-        self.web_support = WebSupportSearch(extra={
+        self.web = WebSearch(extra={
             "use_cache": bool(self.config.get("use_cache", True)),
             "cache_dir": self.config.get("cache_dir", "cache/compare"),
         })
 
     def _search(self, claim):
         documents = []
-        for item in self.web_support.search(claim, top_k=self.max_urls):
+        for item in self.web.search(claim, top_k=self.max_urls):
             documents.append({
                 "title": item.title or "",
                 "source_name": item.metadata.get("source_name", ""),

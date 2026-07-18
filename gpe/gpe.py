@@ -85,7 +85,7 @@ class GPE:
         result.update({"claim_id": claim_id, "evidence_source": evidence_source, "poison_ratio": poison_ratio, "attack_type": attack_type})
         return result
 
-    def search(self, query, top_k=5, source="web_support", extra=None):
+    def search(self, query, top_k=5, source="web", extra=None):
         return self.searcher.search(query, top_k=top_k, source=source, extra=extra)
 
     def create_pipeline(self):

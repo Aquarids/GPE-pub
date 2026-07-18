@@ -18,7 +18,6 @@ def main():
     parser.add_argument("--query", default="steel production emissions")
     parser.add_argument("--claim-id", default="benchmark-000001")
     parser.add_argument("--top-k", type=int, default=3)
-    parser.add_argument("--include-poisoned", action="store_true")
     args = parser.parse_args()
 
     graph = GPEKnowledgeGraph()
@@ -30,7 +29,7 @@ def main():
     results = retriever.search(
         args.query,
         top_k=args.top_k,
-        filter_benign=not args.include_poisoned,
+        filter_benign=False,
     )
     print(json.dumps([
         {

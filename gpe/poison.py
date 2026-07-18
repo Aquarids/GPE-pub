@@ -331,7 +331,7 @@ def poisoned_source_name(claim, generated):
     if not explicit:
         ground_truth = str(claim.get("ground_truth") or "").strip().lower().replace("-", "_")
         explicit = "true" if ground_truth in {"false", "mostly_false"} else "false"
-    return "web_support" if explicit in {"true", "mostly_true"} else "web_refute"
+    return "web"
 
 
 def slugify(value):

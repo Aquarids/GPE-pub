@@ -5,16 +5,14 @@ from gpe.retrieval.search.arxiv_search import ArxivSearch
 from gpe.retrieval.search.politifact_search import PolitifactSearch
 from gpe.retrieval.search.reddit_search import RedditSearch
 from gpe.retrieval.search.site_restricted_search import SiteRestrictedSearch
-from gpe.retrieval.search.web_refute_search import WebRefuteSearch
-from gpe.retrieval.search.web_support_search import WebSupportSearch
+from gpe.retrieval.search.web_search import WebSearch
 from gpe.retrieval.search.wiki_search import WikiSearch
 from gpe.retrieval.search.x_search import XSearch
 
 
 class Searcher:
     SEARCH_SOURCES = {
-        "web_support": {"class": WebSupportSearch, "extra": {"ddg_region": "wt-wt", "ddg_safesearch": "moderate", "article_timeout": 10}},
-        "web_refute": {"class": WebRefuteSearch, "extra": {"ddg_region": "wt-wt", "ddg_safesearch": "moderate", "article_timeout": 10}},
+        "web": {"class": WebSearch, "extra": {"ddg_region": "wt-wt", "ddg_safesearch": "moderate", "article_timeout": 10}},
         "bbc": {"class": SiteRestrictedSearch, "extra": {"namespace": "bbc", "source_name": "BBC", "site_domains": ["bbc.com", "bbc.co.uk"], "source_region": "global", "source_reputation": 0.5, "article_timeout": 10}},
         "nbc": {"class": SiteRestrictedSearch, "extra": {"namespace": "nbc", "source_name": "NBC News", "site_domains": ["nbcnews.com"], "source_region": "us", "source_reputation": 0.5, "article_timeout": 10}},
         "cctv": {"class": SiteRestrictedSearch, "extra": {"namespace": "cctv", "source_name": "CCTV", "site_domains": ["cctv.com", "cgtn.com"], "source_region": "cn", "source_reputation": 0.5, "article_timeout": 10}},
@@ -33,10 +31,10 @@ class Searcher:
         self.claim_loader = claim_loader or ClaimLoader()
         self.logger = logger
 
-    def search(self, query, top_k=5, source="web_support", extra=None):
+    def search(self, query, top_k=5, source="web", extra=None):
         return self._build_search(source, extra).search(query, top_k=top_k)
 
-    def search_by_claim_id(self, claim_id, top_k=5, source="web_support", extra=None):
+    def search_by_claim_id(self, claim_id, top_k=5, source="web", extra=None):
         claim = self.claim_loader.get_claim(claim_id)
         query = claim.get("original_claim") or claim.get("claim") or ""
         return self.search(query, top_k, source, extra)
