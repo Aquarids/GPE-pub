@@ -23,10 +23,6 @@ dependencies = [
   "newspaper4k",
 ]
 
-[project.scripts]
-gpe-evaluate = "gpe.cli.evaluate:main"
-gpe-graph = "gpe.cli.graph_retrieval:main"
-
 [tool.setuptools.packages.find]
 include = ["gpe*"]
 

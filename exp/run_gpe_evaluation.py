@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from fractions import Fraction
@@ -11,7 +12,10 @@ import time
 from dotenv import load_dotenv
 
 
-load_dotenv()
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+load_dotenv(ROOT / ".env")
 
 from gpe.exp import EvaluationCase, EvaluationPipeline, EvidenceRequest, JsonlResultSink
 from gpe.gpe import GPE

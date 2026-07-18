@@ -36,10 +36,10 @@ changed with `LLM_MODEL` and `LLM_BASE_URL`.
 ## Graph and retrieval example
 
 The graph and retrieval example reads only the included datasets and does not
-require an API key. After installation, run:
+require an API key. From the repository root, run:
 
 ```bash
-gpe-graph \
+python exp/run_graph_and_retrieval.py \
   --entity BBC \
   --claim-id benchmark-000001 \
   --query "steel production emissions" \
@@ -55,7 +55,7 @@ evidence in the retrieval results, add `--include-poisoned`.
 Run a one-example smoke test from the repository root:
 
 ```bash
-gpe-evaluate \
+python exp/run_gpe_evaluation.py \
   --method direct_evidence \
   --smoke-test \
   --threads 1
@@ -64,7 +64,7 @@ gpe-evaluate \
 Run the clean evaluation on the complete dataset:
 
 ```bash
-gpe-evaluate \
+python exp/run_gpe_evaluation.py \
   --method direct_evidence \
   --ratio 0 \
   --threads 5
@@ -73,7 +73,7 @@ gpe-evaluate \
 Results are written to `output/.../evaluation/`. Existing completed examples are
 skipped unless `--overwrite` is supplied.
 
-## Build and publish
+## Build a GitHub release artifact
 
 Build a source archive and wheel with the bundled datasets:
 
@@ -82,6 +82,6 @@ python -m pip install --upgrade build
 python -m build
 ```
 
-The artifacts are written to `dist/`. Before publishing, change `name` and
-`version` in `pyproject.toml` as appropriate, then upload with your chosen
-package registry workflow.
+The artifacts are written to `dist/`. Update `version` in `pyproject.toml`,
+create a matching Git tag and GitHub Release, then attach the files in `dist/`
+to that release. No PyPI publication is required.
