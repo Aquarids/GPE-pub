@@ -12,8 +12,8 @@ class BaseDetector(ABC):
         self.llm = llm
         self.config = config or {}
         self.evidence_source = str(self.config.get("evidence_source", "dataset")).strip().lower()
-        if self.evidence_source not in {"dataset", "search"}:
-            raise ValueError("evidence_source must be 'dataset' or 'search'")
+        if self.evidence_source not in {"dataset", "local", "global", "search"}:
+            raise ValueError("evidence_source must be 'dataset', 'local', 'global', or 'search'")
 
     def provided_evidence(self, meta: Dict[str, Any]) -> List[Dict[str, Any]]:
         documents = []
@@ -34,7 +34,7 @@ class BaseDetector(ABC):
         return documents
 
     def resolve_evidence(self, query: str, meta: Dict[str, Any], search_fn):
-        if self.evidence_source == "dataset":
+        if self.evidence_source in {"dataset", "local", "global"}:
             return self.provided_evidence(meta)
         return search_fn(query)
         

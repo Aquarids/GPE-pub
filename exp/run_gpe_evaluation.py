@@ -17,7 +17,14 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 load_dotenv(ROOT / ".env")
 
-from gpe.exp import EvaluationCase, EvaluationPipeline, EvidenceRequest, JsonlResultSink
+from gpe.exp import (
+    EvaluationCase,
+    EvaluationPipeline,
+    EvidenceRequest,
+    ClaimEvidencePool,
+    GlobalEvidencePool,
+    JsonlResultSink,
+)
 from gpe.gpe import GPE
 from gpe.helper.llm_wrapper import LLMWrapper
 from gpe.helper.logger import ENV_LOCAL, Logger
@@ -34,9 +41,9 @@ DYNAMIC_POISON_DATA_PATH = {
 }
 OUTPUT_DIR = Path("output/ds/evaluation")
 
-METHODS = ["direct_evidence", "rafts", "safe", "steel"]
+METHODS = sorted(DETECTORS)
 ATTACK_TYPES = ["fakegpt", "poisonedrag", "ata", "ignore"]
-EVIDENCE_SOURCE = "dataset"
+EVIDENCE_SOURCE = "local"
 
 CATEGORY = None
 LIMIT = None
@@ -100,7 +107,7 @@ def parse_attacks(value):
     return attacks
 
 
-def main():
+def main(evidence_source=EVIDENCE_SOURCE):
     args = parse_args()
     if args.threads < 1:
         raise ValueError("threads must be at least 1")
@@ -108,7 +115,12 @@ def main():
     attacks = parse_attacks(args.attacks)
     limit = 1 if args.smoke_test else args.limit
     include_subclaims = False if args.smoke_test else not args.no_subclaims
-    output_dir = args.output_dir / "smoke" if args.smoke_test else args.output_dir / ratio_name(ratio)
+    source_output_dir = args.output_dir / evidence_source
+    output_dir = (
+        source_output_dir / "smoke"
+        if args.smoke_test
+        else source_output_dir / ratio_name(ratio)
+    )
     output_path = output_dir / f"{args.method}.jsonl"
 
     logger = Logger(f"gpe-evaluation-{args.method}-{ratio_name(ratio)}", ENV_LOCAL, enabled=not QUIET)
@@ -128,9 +140,19 @@ def main():
         logger=logger,
     )
     sink = JsonlResultSink(output_path, overwrite=args.overwrite)
+    claim_pool = ClaimEvidencePool(
+        framework.claims,
+        framework.evidence,
+        framework.poison_cache,
+    )
+    global_pool = GlobalEvidencePool(
+        framework.claims,
+        framework.evidence,
+        framework.poison_cache,
+    )
     method_classes = {**DETECTORS}
     config = dict(DETECTOR_CONFIG)
-    config["evidence_source"] = EVIDENCE_SOURCE
+    config["evidence_source"] = evidence_source
     claims = framework.claims.list_claims(category=args.category)
     if limit is not None:
         claims = claims[:limit]
@@ -148,6 +170,8 @@ def main():
                 framework.evaluator,
                 worker_llm,
                 framework.poison_cache,
+                global_pool=global_pool,
+                claim_pool=claim_pool,
             )
             context = (pipeline, detector)
             worker_state.context = context
@@ -170,13 +194,17 @@ def main():
     ratio_attacks = [None] if ratio == 0 else attacks
     for attack_type in ratio_attacks:
         request = EvidenceRequest(
-            source=EVIDENCE_SOURCE,
+            source=evidence_source,
             top_k=TOP_K,
             poison_ratio=ratio,
             attack_type=attack_type,
             seed=SEED,
             generate_missing_poison=GENERATE_MISSING_POISON,
         )
+        if evidence_source == "global":
+            # Build one immutable candidate pool for this attack condition
+            # before any claim-level retrieval or detector calls begin.
+            global_pool.size(request)
         for claim in claims:
             case = EvaluationCase(
                 method=args.method,

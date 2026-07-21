@@ -53,10 +53,11 @@ python exp/run_graph_and_retrieval.py \
   --top-k 3
 ```
 
-It prints KnownGraph statistics, matching entities, the selected claim's graph
-context, and the top matching evidence records. Retrieval ranks the full
-corpus, including evidence attached to other claims and poisoned evidence, to
-better model a real retrieval setting.
+It prints KnownGraph statistics, matching entities, and the selected claim's
+graph context. It then runs two internal retrieval examples over the same
+query: a claim-local Top-K restricted to `--claim-id`, followed by a global
+Top-K over all bundled evidence. Both examples include benign and poisoned
+records, and each result includes its originating `claim_id`.
 
 ## Search interfaces
 
@@ -64,7 +65,8 @@ There are two distinct search APIs:
 
 - `EvidenceRetriever.search(...)` retrieves from the bundled evidence corpus.
   It is global when `claim_id=None` and restricted to one claim when a
-  `claim_id` is supplied. Select `mode="bm25"` for lexical retrieval or
+  `claim_id` is supplied. The experiment script shows both modes side by side.
+  Select `mode="bm25"` for lexical retrieval or
   `mode="llm"` with an `LLMWrapper` argument for LLM reranking. The LLM mode
   first uses BM25 to recall candidates, then invokes the
   `rank_evidence_summaries` retrieval skill to rank only their titles,
@@ -75,32 +77,66 @@ There are two distinct search APIs:
   `source="web"` submits the caller-provided `query` unchanged; select another
   source with the optional `source` argument.
 
-The evaluation script's default `dataset` mode is different: it directly uses
-the evidence pre-associated with each claim to provide a controlled evaluation
-condition; it does not run corpus retrieval.
+## Retrieval evaluation protocols
+
+`exp/` provides two matched internal-retrieval examples. Both first construct
+evidence with the same `attack_type`, `poison_ratio`, seed, and per-claim pool
+size, then use the current claim as the retrieval query and pass only the
+retrieved Top-K records to the detector.
+
+- `run_claim_retrieval_evaluation.py` constructs a pool only from the current
+  `claim_id`'s evidence, then retrieves Top-K from that local pool.
+- `run_global_retrieval_evaluation.py` first constructs evidence for all 638
+  benchmark claims, combines those records into one pool for the condition,
+  then retrieves Top-K from that global pool. The pool is prebuilt once before
+  worker threads start and shared by all workers.
+
+This pair separates claim-local retrieval from retrieval plus cross-claim
+aggregation under the same evidence construction and attack condition. Each
+result records the retrieval source, pool size, retrieval mode, candidate count,
+and Top-K settings.
+
+`EvidenceRequest.top_k` controls the final number of retrieved records passed
+to a detector. Set `EvidenceRequest.pool_top_k` when the number of records each
+claim contributes to the global pool should differ from that final Top-K; when
+omitted, it defaults to `top_k` and its effective value is recorded in results.
+
+`source="dataset"` remains available through `EvidenceRequest` as a controlled
+claim-local baseline; it bypasses global retrieval.
 
 ## Evaluation
 
-Run a one-example smoke test from the repository root:
+Run a one-example claim-local smoke test from the repository root:
 
 ```bash
-python exp/run_gpe_evaluation.py \
+python exp/run_claim_retrieval_evaluation.py \
   --method direct_evidence \
   --smoke-test \
   --threads 1
 ```
 
-Run the clean evaluation on the complete dataset:
+Run the matched global-pool smoke test:
 
 ```bash
-python exp/run_gpe_evaluation.py \
+python exp/run_global_retrieval_evaluation.py \
+  --method direct_evidence \
+  --smoke-test \
+  --threads 1
+```
+
+Run the complete global-pool evaluation:
+
+```bash
+python exp/run_global_retrieval_evaluation.py \
   --method direct_evidence \
   --ratio 0 \
   --threads 5
 ```
 
-Results are written to `output/.../evaluation/`. Existing completed examples are
-skipped unless `--overwrite` is supplied.
+Results are written separately to `output/ds/evaluation/local/` and
+`output/ds/evaluation/global/`. Existing completed examples are skipped unless
+`--overwrite` is supplied. The available methods are `direct_claim` and
+`direct_evidence`.
 
 ## Build a GitHub release artifact
 

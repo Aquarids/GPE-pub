@@ -28,10 +28,19 @@ def _evidence_items(record):
 
 
 class EvidenceRetriever:
-    def __init__(self, data_path=None):
+    def __init__(self, data_path=None, documents=None):
         self.data_path = Path(data_path) if data_path is not None else GPE_DATA_PATH
         self.documents = []
         self.document_frequency = Counter()
+        if documents is None:
+            documents = self._load_documents()
+        for evidence in documents:
+            self._add_document(evidence)
+        self.average_length = (sum(length for _, _, length in self.documents) / len(self.documents)
+                               if self.documents else 0.0)
+
+    def _load_documents(self):
+        documents = []
         with self.data_path.open(encoding="utf-8") as file:
             for line in file:
                 if not line.strip():
@@ -39,23 +48,31 @@ class EvidenceRetriever:
                 record = json.loads(line)
                 claim_id = record["claim_id"]
                 for evidence in _evidence_items(record):
-                    metadata = evidence.get("retrieval") or {}
-                    text = " ".join([
-                        str(evidence.get("title") or ""),
-                        str(evidence.get("summary") or ""),
-                        " ".join(evidence.get("contents") or []),
-                        " ".join(metadata.get("keywords") or []),
-                        str(metadata.get("seo_description") or ""),
-                    ])
-                    counts = Counter(_tokens(text))
-                    self.document_frequency.update(counts)
-                    self.documents.append(({
-                        **evidence,
-                        "claim_id": claim_id,
-                        "record_id": f"{claim_id}:{evidence['evidence_id']}",
-                    }, counts, sum(counts.values())))
-        self.average_length = (sum(length for _, _, length in self.documents) / len(self.documents)
-                               if self.documents else 0.0)
+                    documents.append({**evidence, "claim_id": claim_id})
+        return documents
+
+    def _add_document(self, evidence):
+        evidence = dict(evidence)
+        metadata = evidence.get("retrieval") or {}
+        contents = evidence.get("contents") or []
+        if isinstance(contents, str):
+            contents = [contents]
+        text = " ".join([
+            str(evidence.get("title") or ""),
+            str(evidence.get("summary") or ""),
+            " ".join(contents),
+            " ".join(metadata.get("keywords") or []),
+            str(metadata.get("seo_description") or ""),
+        ])
+        counts = Counter(_tokens(text))
+        self.document_frequency.update(counts)
+        claim_id = str(evidence.get("claim_id") or "")
+        evidence_id = str(evidence.get("evidence_id") or len(self.documents))
+        self.documents.append(({
+            **evidence,
+            "claim_id": claim_id,
+            "record_id": f"{claim_id}:{evidence_id}",
+        }, counts, sum(counts.values())))
 
     def search(
         self,

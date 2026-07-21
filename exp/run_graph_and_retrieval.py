@@ -12,6 +12,20 @@ from gpe.graph import GPEKnowledgeGraph
 from gpe.retrieval import EvidenceRetriever
 
 
+def summarize_results(results):
+    return [
+        {
+            "record_id": item["record_id"],
+            "claim_id": item["claim_id"],
+            "score": item["score"],
+            "title": item.get("title"),
+            "url": item.get("url"),
+            "evidence_type": item.get("evidence_type"),
+        }
+        for item in results
+    ]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--entity", default="BBC")
@@ -26,21 +40,28 @@ def main():
     print(json.dumps(graph.claim_context(args.claim_id), ensure_ascii=False, indent=2))
 
     retriever = EvidenceRetriever()
-    results = retriever.search(
+    local_results = retriever.search(
+        args.query,
+        top_k=args.top_k,
+        claim_id=args.claim_id,
+        filter_benign=False,
+    )
+    global_results = retriever.search(
         args.query,
         top_k=args.top_k,
         filter_benign=False,
     )
-    print(json.dumps([
-        {
-            "record_id": item["record_id"],
-            "score": item["score"],
-            "title": item.get("title"),
-            "url": item.get("url"),
-            "evidence_type": item.get("evidence_type"),
-        }
-        for item in results
-    ], ensure_ascii=False, indent=2))
+    print(json.dumps({
+        "scope": "claim",
+        "claim_id": args.claim_id,
+        "query": args.query,
+        "results": summarize_results(local_results),
+    }, ensure_ascii=False, indent=2))
+    print(json.dumps({
+        "scope": "global",
+        "query": args.query,
+        "results": summarize_results(global_results),
+    }, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
