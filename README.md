@@ -138,6 +138,33 @@ Results are written separately to `output/ds/evaluation/local/` and
 `--overwrite` is supplied. The available methods are `direct_claim` and
 `direct_evidence`.
 
+## Token accounting
+
+Evaluation results record LLM usage in two separate scopes. They must be
+reported separately and are not added together.
+
+- `overall_usage` / the summary's `overall.token_usage` covers the claim-level
+  prediction. It starts before evidence resolution and ends after the detector
+  returns the claim label, so it includes LLM retrieval reranking when
+  `retrieval_mode="llm"`, as well as the final claim-verification call. BM25
+  retrieval itself has no LLM token cost.
+- Each entry in `subclaims[*].usage` / the summary's
+  `subclaim.token_usage` covers one subclaim prediction. The summary sums these
+  calls only; it does not charge the shared retrieval step again and does not
+  include the claim-level prediction.
+
+For each scope, `token_usage` reports provider-reported `prompt_tokens`,
+`completion_tokens`, `total_tokens`, and `request_count`. The summary also
+reports three token-efficiency measures, using exact-label correctness:
+
+- `tcv` (tokens per correct verification) = `total_tokens / correct`;
+- `correct_per_1k_tokens` = `1000 * correct / total_tokens`;
+- `tokens_per_prediction` = `total_tokens / total_predictions`.
+
+When no prediction is correct, `tcv` is reported as `null`. The per-result
+`overall_usage.by_call_type` field additionally separates dialogue, generation,
+and tool-call usage when supplied by the LLM provider.
+
 ## Build a GitHub release artifact
 
 Build a source archive and wheel with the bundled datasets:
