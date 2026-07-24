@@ -74,7 +74,6 @@ class DatasetEvidenceLoader:
         poison_cache=None,
         generate_missing_poison=False,
     ):
-        record = self.claim_loader._record(claim_id)
         benign = [
             copy_evidence(item)
             for item in self.claim_loader.benign_evidence(claim_id)
@@ -89,7 +88,32 @@ class DatasetEvidenceLoader:
             )
 
         selected_benign = benign[:target_total]
-        if ratio <= 0.0:
+        return self.mix_selected_evidence(
+            claim_id,
+            selected_benign,
+            poison_ratio=ratio,
+            attack_type=attack_type,
+            seed=seed,
+            poison_cache=poison_cache,
+            generate_missing_poison=generate_missing_poison,
+        )
+
+    def mix_selected_evidence(
+        self,
+        claim_id,
+        benign,
+        poison_ratio=0.0,
+        attack_type=None,
+        seed=0,
+        poison_cache=None,
+        generate_missing_poison=False,
+    ):
+        """Replace selected benign records with poison while preserving list size."""
+        record = self.claim_loader._record(claim_id)
+        selected_benign = [copy_evidence(item) for item in benign]
+        target_total = len(selected_benign)
+        ratio = clamp_ratio(poison_ratio)
+        if ratio <= 0.0 or target_total == 0:
             return selected_benign
 
         attack_type = normalize_attack_type(attack_type)

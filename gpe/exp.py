@@ -191,6 +191,18 @@ class ConditionedEvidencePool:
             documents.append(item)
         return documents
 
+    def _benign_claim_documents(self, claim_id, request):
+        metadata = self._load_retrieval_metadata(request.retrieval_data_path)
+        documents = []
+        for item in self.claims.benign_evidence(claim_id):
+            item = dict(item)
+            item["claim_id"] = claim_id
+            item_metadata = metadata.get((str(claim_id), str(item.get("evidence_id"))))
+            if item_metadata:
+                item["retrieval"] = item_metadata
+            documents.append(item)
+        return documents
+
     def _load_retrieval_metadata(self, path):
         if not path:
             return {}
@@ -231,17 +243,31 @@ class GlobalEvidencePool(ConditionedEvidencePool):
 
 class ClaimEvidencePool(ConditionedEvidencePool):
     def search(self, claim_id, query, request, llm):
-        return self._search(self._retriever(claim_id, request), query, request, llm)
+        retrieved_benign = self._search(
+            self._retriever(claim_id, request),
+            query,
+            request,
+            llm,
+        )
+        return self.evidence.mix_selected_evidence(
+            claim_id,
+            retrieved_benign,
+            poison_ratio=request.poison_ratio,
+            attack_type=request.attack_type,
+            seed=request.seed,
+            poison_cache=self.poison_cache,
+            generate_missing_poison=request.generate_missing_poison,
+        )
 
     def size(self, claim_id, request):
         return len(self._retriever(claim_id, request).documents)
 
     def _retriever(self, claim_id, request):
-        key = (str(claim_id), *self._condition_key(request))
+        key = (str(claim_id), request.retrieval_data_path)
         with self.lock:
             if key not in self.retrievers:
                 self.retrievers[key] = EvidenceRetriever(
-                    documents=self._claim_documents(claim_id, request)
+                    documents=self._benign_claim_documents(claim_id, request)
                 )
             return self.retrievers[key]
 

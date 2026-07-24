@@ -79,13 +79,15 @@ There are two distinct search APIs:
 
 ## Retrieval evaluation protocols
 
-`exp/` provides two matched internal-retrieval examples. Both first construct
-evidence with the same `attack_type`, `poison_ratio`, seed, and per-claim pool
-size, then use the current claim as the retrieval query and pass only the
-retrieved Top-K records to the detector.
+`exp/` provides two matched internal-retrieval examples. Both use the current
+claim as the retrieval query and pass only final Top-K records to the detector,
+but poisoning is applied at a different stage in each protocol.
 
-- `run_claim_retrieval_evaluation.py` constructs a pool only from the current
-  `claim_id`'s evidence, then retrieves Top-K from that local pool.
+- `run_claim_retrieval_evaluation.py` retrieves Top-K only from the current
+  `claim_id`'s benign evidence pool, then replaces `round(Top-K ×
+  poison_ratio)` retrieved records with the configured attack. Thus poison does
+  not affect local retrieval or reranking, and the final evidence list has the
+  requested attack ratio.
 - `run_global_retrieval_evaluation.py` first constructs evidence for all 638
   benchmark claims, combines those records into one pool for the condition,
   then retrieves Top-K from that global pool. The pool is prebuilt once before
