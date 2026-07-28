@@ -25,6 +25,12 @@ def _evidence_items(record):
             evidence.setdefault("evidence_type", "poisoned")
             evidence.setdefault("attack_type", attack)
             yield evidence
+    for item in environment.get("related_distractor") or []:
+        evidence = dict(item)
+        evidence.setdefault("evidence_type", "related_distractor")
+        evidence.setdefault("attack_type", None)
+        evidence["contents"] = []
+        yield evidence
 
 
 class EvidenceRetriever:
@@ -83,16 +89,22 @@ class EvidenceRetriever:
         mode="bm25",
         llm=None,
         candidate_k=30,
+        exclude_related_distractors=False,
     ):
         """Retrieve evidence with BM25 or LLM summary-based reranking.
 
         Omit ``claim_id`` to search the full corpus; provide one to restrict
-        candidates to a benchmark claim. LLM mode uses BM25 to recall
+        candidates to a benchmark claim. By default, the corpus includes
+        entity-related distractors with empty ``contents``; set
+        ``exclude_related_distractors=True`` to omit them for this retrieval.
+        LLM mode uses BM25 to recall
         ``candidate_k`` records, then ranks their titles, summaries, and
         keywords without sending full evidence contents to the LLM.
         """
         if mode == "bm25":
-            return self._search_bm25(query, top_k, filter_benign, claim_id)
+            return self._search_bm25(
+                query, top_k, filter_benign, claim_id, exclude_related_distractors
+            )
         if mode == "llm":
             if llm is None:
                 raise ValueError("llm is required when mode='llm'")
@@ -103,10 +115,18 @@ class EvidenceRetriever:
                 candidate_k=candidate_k,
                 filter_benign=filter_benign,
                 claim_id=claim_id,
+                exclude_related_distractors=exclude_related_distractors,
             )
         raise ValueError("mode must be 'bm25' or 'llm'")
 
-    def _search_bm25(self, query, top_k=10, filter_benign=False, claim_id=None):
+    def _search_bm25(
+        self,
+        query,
+        top_k=10,
+        filter_benign=False,
+        claim_id=None,
+        exclude_related_distractors=False,
+    ):
         terms = _tokens(query)
         if not terms or top_k < 1:
             return []
@@ -114,6 +134,11 @@ class EvidenceRetriever:
         results = []
         for evidence, counts, length in self.documents:
             if filter_benign and evidence.get("evidence_type") != "benign":
+                continue
+            if (
+                exclude_related_distractors
+                and evidence.get("evidence_type") == "related_distractor"
+            ):
                 continue
             if claim_id and evidence["claim_id"] != claim_id:
                 continue
@@ -132,8 +157,23 @@ class EvidenceRetriever:
                 results.append(result)
         return sorted(results, key=lambda item: item["score"], reverse=True)[:top_k]
 
-    def search_llm(self, query, llm, top_k=10, candidate_k=30, filter_benign=False, claim_id=None):
-        candidates = self._search_bm25(query, candidate_k, filter_benign, claim_id)
+    def search_llm(
+        self,
+        query,
+        llm,
+        top_k=10,
+        candidate_k=30,
+        filter_benign=False,
+        claim_id=None,
+        exclude_related_distractors=False,
+    ):
+        candidates = self._search_bm25(
+            query,
+            candidate_k,
+            filter_benign,
+            claim_id,
+            exclude_related_distractors,
+        )
         if not candidates:
             return []
         ranked = rank_evidence_summaries(llm, query, candidates, top_k)

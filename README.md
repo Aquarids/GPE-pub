@@ -66,6 +66,13 @@ There are two distinct search APIs:
 - `EvidenceRetriever.search(...)` retrieves from the bundled evidence corpus.
   It is global when `claim_id=None` and restricted to one claim when a
   `claim_id` is supplied. The experiment script shows both modes side by side.
+  By default, its corpus includes `evidence_environment.related_distractor`
+  records: entity-related but claim-irrelevant records whose `contents` is an
+  empty list. To remove them for an ablation, pass
+  `exclude_related_distractors=True` to `search(...)`. This option affects both
+  BM25 candidate retrieval and LLM reranking.
+  The same default and option apply to `EvidenceRequest` with retrieval source
+  `"local"` or `"global"`.
   Select `mode="bm25"` for lexical retrieval or
   `mode="llm"` with an `LLMWrapper` argument for LLM reranking. The LLM mode
   first uses BM25 to recall candidates, then invokes the

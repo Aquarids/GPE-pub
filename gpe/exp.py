@@ -21,6 +21,7 @@ class EvidenceRequest:
     retrieval_data_path: str | None = None
     retrieval_candidate_k: int = 30
     filter_benign: bool = False
+    exclude_related_distractors: bool = False
     pool_top_k: int | None = None
 
 
@@ -161,6 +162,7 @@ class ConditionedEvidencePool:
             mode=request.retrieval_mode,
             llm=llm,
             candidate_k=request.retrieval_candidate_k,
+            exclude_related_distractors=request.exclude_related_distractors,
         )
 
     def _condition_key(self, request):
@@ -189,6 +191,9 @@ class ConditionedEvidencePool:
             if item_metadata:
                 item["retrieval"] = item_metadata
             documents.append(item)
+        for item in self.claims.related_distractors(claim_id):
+            item["claim_id"] = claim_id
+            documents.append(item)
         return documents
 
     def _benign_claim_documents(self, claim_id, request):
@@ -200,6 +205,9 @@ class ConditionedEvidencePool:
             item_metadata = metadata.get((str(claim_id), str(item.get("evidence_id"))))
             if item_metadata:
                 item["retrieval"] = item_metadata
+            documents.append(item)
+        for item in self.claims.related_distractors(claim_id):
+            item["claim_id"] = claim_id
             documents.append(item)
         return documents
 

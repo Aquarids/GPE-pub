@@ -51,6 +51,15 @@ class ClaimLoader:
             for item in environment.get("benign") or record.get("evidence") or []
         ]
 
+    def related_distractors(self, claim_id):
+        """Return entity-related, claim-irrelevant evidence for retrieval."""
+        record = self._record(claim_id)
+        environment = record.get("evidence_environment") or {}
+        return [
+            {**item, "evidence_type": "related_distractor", "contents": []}
+            for item in environment.get("related_distractor") or []
+        ]
+
     def _record(self, claim_id):
         key = str(claim_id)
         if key not in self.by_claim_id:
