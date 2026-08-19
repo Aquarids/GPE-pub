@@ -1,7 +1,12 @@
 # GPE
 
-This repository contains the code and datasets for running the GPE evaluation,
-KnownGraph queries, and evidence retrieval.
+This repository is the official code implementation of the following paper:
+
+> **GPE: Evaluating Robust Evidence Aggregation for Fact Verification under
+> Controllable GEO-Style Poisoning**
+
+It contains the code and datasets for running the GPE evaluation, KnownGraph
+queries, and evidence retrieval.
 
 ## Data
 
@@ -11,17 +16,17 @@ KnownGraph queries, and evidence retrieval.
 
 ## Setup
 
-Install the package from the tagged GitHub source (the datasets are included):
+Install the package from PyPI (the datasets are included):
 
 ```bash
-python -m pip install "gpe-eval @ git+https://github.com/Aquarids/GPE-pub.git@v0.1.0"
+python -m pip install gpe-eval
 ```
 
 To add GPE to another Conda environment, put the following entry under that
 environment's `pip:` dependencies, then run `conda env update -f environment.yml`:
 
 ```yaml
-- gpe-eval @ git+https://github.com/Aquarids/GPE-pub.git@v0.1.0
+- gpe-eval
 ```
 
 For development, the existing Conda environment remains available:
@@ -174,15 +179,24 @@ When no prediction is correct, `tcv` is reported as `null`. The per-result
 `overall_usage.by_call_type` field additionally separates dialogue, generation,
 and tool-call usage when supplied by the LLM provider.
 
-## Build a GitHub release artifact
+## Publish a release
 
-Build a source archive and wheel with the bundled datasets:
+The GitHub Actions workflow [`.github/workflows/pypi-publish.yml`](.github/workflows/pypi-publish.yml)
+builds, validates, and uploads a published GitHub Release through PyPI Trusted
+Publishing. Configure PyPI's GitHub trusted publisher once with repository
+`Aquarids/GPE-pub`, workflow `pypi-publish.yml`, and environment `pypi`; then
+create a GitHub Release for the desired version tag. No PyPI API token is
+stored in the repository or GitHub Secrets.
 
-```bash
-python -m pip install --upgrade build
-python -m build
+## Citation
+
+If you find this repository or the GPE benchmark useful, please cite:
+
+```bibtex
+@article{wang2026gpe,
+  title={GPE: Evaluating Robust Evidence Aggregation for Fact Verification under Controllable GEO-Style Poisoning},
+  author={Wang, Zhaoqi and Zhang, Zijian and Yuan, Xiaomei and Kou, Pengtao and Liu, Jiamou and Li, Zhen and Zhu, Liehuang},
+  journal={arXiv preprint arXiv:2607.20730},
+  year={2026}
+}
 ```
-
-The artifacts are written to `dist/`. Update `version` in `pyproject.toml`,
-create a matching Git tag and GitHub Release, then attach the files in `dist/`
-to that release. No PyPI publication is required.
