@@ -32,8 +32,6 @@ conda activate gpe
 
 Copy `.env.example` to `.env` and configure the API endpoint used by the verification method or dynamic attack generator.
 
-Validate a source checkout with `python exp/validate_release.py`.
-
 ## Dataset
 
 The package bundles `gpe/data/gpe.jsonl` and `gpe/data/gpe.schema.json`.
@@ -42,15 +40,6 @@ The package bundles `gpe/data/gpe.jsonl` and `gpe/data/gpe.schema.json`.
 - 5,833 benign evidence objects
 - 6,140 related distractors
 - 17,120 fixed poisoned evidence objects across four attacks
-
-Each evidence object carries its own `source_scope`, and source filtering reads this attribute directly.
-
-```python
-from gpe.resources import bundled_data_path, bundled_schema_path
-
-print(bundled_data_path())
-print(bundled_schema_path())
-```
 
 ## Claim and controlled-evidence access
 
@@ -117,7 +106,7 @@ source_counts = {
 print(source_counts)
 ```
 
-Use `evidence_type` to separate benign, related-distractor, and poisoned records. `retrieval_source` optionally separates individual platforms such as X, Reddit, and Facebook inside the normalized `social` scope. `contents` may be empty when a source exposes only a title or search snippet.
+Use `evidence_type` to separate benign, related-distractor, and poisoned records. `retrieval_source` optionally separates individual platforms such as X, Reddit, and Facebook inside the normalized `social` scope.
 
 LLM reranking uses opaque candidate numbers and sends only titles, summaries, and keywords to the ranking model.
 
