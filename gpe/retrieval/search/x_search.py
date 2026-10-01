@@ -89,6 +89,15 @@ class XSearch(DDGBaseSearch):
 
     def _to_document(self, hit, tweet, rank, suffix) -> Document:
         url = hit["url"]
+        username = tweet["username"].casefold()
+        official_accounts = _account_set(self.extra.get("official_accounts"))
+        nonofficial_accounts = _account_set(self.extra.get("nonofficial_accounts"))
+        if username in official_accounts:
+            account_type = "official"
+        elif username in nonofficial_accounts:
+            account_type = "nonofficial"
+        else:
+            account_type = "unknown"
         metadata = {
             "rank": rank,
             "snippet": hit.get("snippet", ""),
@@ -96,6 +105,7 @@ class XSearch(DDGBaseSearch):
             "author_url": tweet["author_url"],
             "username": tweet["username"],
             "tweet_id": tweet["tweet_id"],
+            "account_type": account_type,
             "query_suffix": list(suffix),
         }
         return Document(
@@ -112,3 +122,13 @@ class XSearch(DDGBaseSearch):
 
 def _doc_id(tweet_id):
     return f"x-{tweet_id}"
+
+
+def _account_set(value):
+    if isinstance(value, str):
+        value = value.split(",")
+    return {
+        str(item).strip().casefold().removeprefix("@")
+        for item in value or []
+        if str(item).strip()
+    }

@@ -20,19 +20,24 @@ class Searcher:
         "piyao": {"class": SiteRestrictedSearch, "extra": {"namespace": "piyao", "source_name": "China Internet Joint Rumor Refutation Platform", "site_domains": ["piyao.org.cn"], "source_region": "cn", "source_reputation": 0.5, "article_timeout": 10}},
         "weibo": {"class": SiteRestrictedSearch, "extra": {"namespace": "weibo", "source_name": "Weibo", "site_domains": ["weibo.com", "m.weibo.cn"], "source_region": "cn", "source_reputation": 0.5, "article_timeout": 8, "allow_snippet_fallback": True}},
         "xiaohongshu": {"class": SiteRestrictedSearch, "extra": {"namespace": "xiaohongshu", "source_name": "Xiaohongshu", "site_domains": ["xiaohongshu.com", "xhslink.com"], "source_region": "cn", "source_reputation": 0.5, "article_timeout": 8, "allow_snippet_fallback": True}},
-        "x": {"class": XSearch, "extra": {"ddg_region": "wt-wt", "ddg_safesearch": "moderate", "oembed_timeout": 10, "oembed_rate_limit": 1.5}},
+        "x": {"class": XSearch, "extra": {"ddg_region": "wt-wt", "ddg_safesearch": "moderate", "ddg_backend": os.getenv("GPE_DDG_SOCIAL_BACKEND", "brave"), "oembed_timeout": 10, "oembed_rate_limit": 1.5, "official_accounts": os.getenv("X_OFFICIAL_ACCOUNTS", ""), "nonofficial_accounts": os.getenv("X_NONOFFICIAL_ACCOUNTS", "")}},
         "politifact": {"class": PolitifactSearch, "extra": {"timeout": 15, "rate_limit": 1.5}},
         "wiki": {"class": WikiSearch, "extra": {"access_token": os.getenv("WIKI_ACCESS_TOKEN") or None, "language": os.getenv("WIKI_LANGUAGE", "en"), "user_agent": os.getenv("WIKI_USER_AGENT", "GeoPoisonEval/0.1"), "rate_limit": 0.72, "timeout": 15}},
-        "arxiv": {"class": ArxivSearch, "extra": {"page_size": 100, "rate_limit": 3.0, "num_retries": 3}},
-        "reddit": {"class": RedditSearch, "extra": {"timeout": 10, "rate_limit": 1.0, "include_comments": False, "max_comments": 10}},
+        "arxiv": {"class": ArxivSearch, "extra": {"page_size": 100, "rate_limit": float(os.getenv("ARXIV_RATE_LIMIT", "3.0")), "num_retries": 3}},
+        "reddit": {"class": RedditSearch, "extra": {"ddg_backend": os.getenv("GPE_DDG_SOCIAL_BACKEND", "brave"), "timeout": 10, "rate_limit": 1.0, "include_comments": False, "max_comments": 10}},
+        "facebook": {"class": SiteRestrictedSearch, "extra": {"namespace": "facebook", "source_name": "Facebook", "site_domains": ["facebook.com"], "source_region": "global", "source_reputation": 0.5, "article_timeout": 8, "allow_snippet_fallback": True}},
     }
 
     def __init__(self, claim_loader=None, logger=None):
         self.claim_loader = claim_loader or ClaimLoader()
         self.logger = logger
+        self.last_search_error = ""
 
     def search(self, query, top_k=5, source="web", extra=None):
-        return self._build_search(source, extra).search(query, top_k=top_k)
+        search = self._build_search(source, extra)
+        documents = search.search(query, top_k=top_k)
+        self.last_search_error = search.last_error
+        return documents
 
     def search_by_claim_id(self, claim_id, top_k=5, source="web", extra=None):
         claim = self.claim_loader.get_claim(claim_id)

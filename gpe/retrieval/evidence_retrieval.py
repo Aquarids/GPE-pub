@@ -6,6 +6,7 @@ from pathlib import Path
 
 from gpe.resources import GPE_DATA_PATH
 from gpe.retrieval.retrieval_skill import rank_evidence_summaries
+from gpe.retrieval.source_scope import matches_source_scope
 
 
 def _tokens(text):
@@ -29,19 +30,28 @@ def _evidence_items(record):
         evidence = dict(item)
         evidence.setdefault("evidence_type", "related_distractor")
         evidence.setdefault("attack_type", None)
-        evidence["contents"] = []
         yield evidence
 
 
 class EvidenceRetriever:
-    def __init__(self, data_path=None, documents=None):
+    def __init__(
+        self,
+        data_path=None,
+        documents=None,
+        evidence_types=None,
+        attack_types=None,
+    ):
         self.data_path = Path(data_path) if data_path is not None else GPE_DATA_PATH
+        self.evidence_types = set(evidence_types) if evidence_types is not None else None
+        self.attack_types = set(attack_types) if attack_types is not None else None
         self.documents = []
         self.document_frequency = Counter()
+        self.scope_statistics = {}
         if documents is None:
             documents = self._load_documents()
         for evidence in documents:
-            self._add_document(evidence)
+            if self._accept_evidence(evidence):
+                self._add_document(evidence)
         self.average_length = (sum(length for _, _, length in self.documents) / len(self.documents)
                                if self.documents else 0.0)
 
@@ -54,8 +64,24 @@ class EvidenceRetriever:
                 record = json.loads(line)
                 claim_id = record["claim_id"]
                 for evidence in _evidence_items(record):
+                    if not self._accept_evidence(evidence):
+                        continue
                     documents.append({**evidence, "claim_id": claim_id})
         return documents
+
+    def _accept_evidence(self, evidence):
+        if (
+            self.evidence_types is not None
+            and evidence.get("evidence_type") not in self.evidence_types
+        ):
+            return False
+        if (
+            self.attack_types is not None
+            and evidence.get("evidence_type") == "poisoned"
+            and evidence.get("attack_type") not in self.attack_types
+        ):
+            return False
+        return True
 
     def _add_document(self, evidence):
         evidence = dict(evidence)
@@ -89,21 +115,18 @@ class EvidenceRetriever:
         mode="bm25",
         llm=None,
         candidate_k=30,
-        exclude_related_distractors=False,
+        source_scope="web",
     ):
         """Retrieve evidence with BM25 or LLM summary-based reranking.
 
         Omit ``claim_id`` to search the full corpus; provide one to restrict
-        candidates to a benchmark claim. By default, the corpus includes
-        entity-related distractors with empty ``contents``; set
-        ``exclude_related_distractors=True`` to omit them for this retrieval.
-        LLM mode uses BM25 to recall
+        candidates to a benchmark claim. LLM mode uses BM25 to recall
         ``candidate_k`` records, then ranks their titles, summaries, and
         keywords without sending full evidence contents to the LLM.
         """
         if mode == "bm25":
             return self._search_bm25(
-                query, top_k, filter_benign, claim_id, exclude_related_distractors
+                query, top_k, filter_benign, claim_id, source_scope
             )
         if mode == "llm":
             if llm is None:
@@ -115,9 +138,31 @@ class EvidenceRetriever:
                 candidate_k=candidate_k,
                 filter_benign=filter_benign,
                 claim_id=claim_id,
-                exclude_related_distractors=exclude_related_distractors,
+                source_scope=source_scope,
             )
         raise ValueError("mode must be 'bm25' or 'llm'")
+
+    def _scoped_documents(self, source_scope, filter_benign):
+        key = (source_scope, bool(filter_benign))
+        if key not in self.scope_statistics:
+            documents = [
+                item
+                for item in self.documents
+                if (not filter_benign or item[0].get("evidence_type") == "benign")
+                and matches_source_scope(item[0], source_scope)
+            ]
+            frequencies = Counter()
+            lengths = []
+            for _, counts, length in documents:
+                frequencies.update(counts.keys())
+                lengths.append(length)
+            average_length = sum(lengths) / len(lengths) if lengths else 0.0
+            self.scope_statistics[key] = (documents, frequencies, average_length)
+        return self.scope_statistics[key]
+
+    def count(self, source_scope="web", filter_benign=False):
+        documents, _, _ = self._scoped_documents(source_scope, filter_benign)
+        return len(documents)
 
     def _search_bm25(
         self,
@@ -125,21 +170,19 @@ class EvidenceRetriever:
         top_k=10,
         filter_benign=False,
         claim_id=None,
-        exclude_related_distractors=False,
+        source_scope="web",
     ):
         terms = _tokens(query)
         if not terms or top_k < 1:
             return []
-        total = len(self.documents)
+        documents, document_frequency, average_length = self._scoped_documents(
+            source_scope, filter_benign
+        )
+        total = len(documents)
+        if not total or not average_length:
+            return []
         results = []
-        for evidence, counts, length in self.documents:
-            if filter_benign and evidence.get("evidence_type") != "benign":
-                continue
-            if (
-                exclude_related_distractors
-                and evidence.get("evidence_type") == "related_distractor"
-            ):
-                continue
+        for evidence, counts, length in documents:
             if claim_id and evidence["claim_id"] != claim_id:
                 continue
             score = 0.0
@@ -147,9 +190,9 @@ class EvidenceRetriever:
                 frequency = counts.get(term, 0)
                 if not frequency:
                     continue
-                inverse_frequency = math.log(1 + (total - self.document_frequency[term] + 0.5)
-                                             / (self.document_frequency[term] + 0.5))
-                denominator = frequency + 1.2 * (1 - 0.75 + 0.75 * length / self.average_length)
+                inverse_frequency = math.log(1 + (total - document_frequency[term] + 0.5)
+                                             / (document_frequency[term] + 0.5))
+                denominator = frequency + 1.2 * (1 - 0.75 + 0.75 * length / average_length)
                 score += inverse_frequency * frequency * 2.2 / denominator
             if score:
                 result = dict(evidence)
@@ -165,19 +208,22 @@ class EvidenceRetriever:
         candidate_k=30,
         filter_benign=False,
         claim_id=None,
-        exclude_related_distractors=False,
+        source_scope="web",
     ):
         candidates = self._search_bm25(
-            query,
-            candidate_k,
-            filter_benign,
-            claim_id,
-            exclude_related_distractors,
+            query, candidate_k, filter_benign, claim_id, source_scope
         )
         if not candidates:
             return []
-        ranked = rank_evidence_summaries(llm, query, candidates, top_k)
-        by_id = {item["record_id"]: item for item in candidates}
+        ranking_candidates = []
+        by_id = {}
+        for index, item in enumerate(candidates, start=1):
+            opaque_id = f"candidate-{index:04d}"
+            ranking_item = dict(item)
+            ranking_item["record_id"] = opaque_id
+            ranking_candidates.append(ranking_item)
+            by_id[opaque_id] = item
+        ranked = rank_evidence_summaries(llm, query, ranking_candidates, top_k)
         selected = []
         seen = set()
         for item in ranked:

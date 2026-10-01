@@ -47,9 +47,11 @@ Use uncertain when the supplied evidence is insufficient or highly conflicting.
             {
                 "title": item.get("title"),
                 "source_name": item.get("source_name"),
+                "source_scope": item.get("source_scope"),
                 "published_at": item.get("published_at"),
                 "author": item.get("author"),
                 "url": item.get("url"),
+                "source_provenance": item.get("source_provenance") or {},
                 "contents": item.get("contents") or [],
             }
             for item in evidence

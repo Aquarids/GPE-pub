@@ -4,6 +4,26 @@ from typing import Dict, Any, List
 from gpe.helper.llm_wrapper import LLMWrapper
 from gpe.helper.logger import Logger
 
+
+PUBLIC_PROVENANCE_FIELDS = {
+    "channel",
+    "platform",
+    "authority_type",
+    "account_type",
+    "revision_id",
+    "submission_id",
+}
+
+
+def public_source_provenance(value):
+    if not isinstance(value, dict):
+        return {}
+    return {
+        key: item
+        for key, item in value.items()
+        if key in PUBLIC_PROVENANCE_FIELDS and item not in {None, ""}
+    }
+
 class BaseDetector(ABC):
 
     def __init__(self, logger: Logger, llm: LLMWrapper, config=None):
@@ -12,8 +32,8 @@ class BaseDetector(ABC):
         self.llm = llm
         self.config = config or {}
         self.evidence_source = str(self.config.get("evidence_source", "dataset")).strip().lower()
-        if self.evidence_source not in {"dataset", "local", "global", "search"}:
-            raise ValueError("evidence_source must be 'dataset', 'local', 'global', or 'search'")
+        if self.evidence_source not in {"dataset", "search"}:
+            raise ValueError("evidence_source must be 'dataset' or 'search'")
 
     def provided_evidence(self, meta: Dict[str, Any]) -> List[Dict[str, Any]]:
         documents = []
@@ -25,16 +45,20 @@ class BaseDetector(ABC):
             documents.append({
                 "title": item.get("title") or "",
                 "source_name": item.get("source_name") or "",
+                "source_scope": item.get("source_scope") or "",
                 "url": item.get("url") or "",
                 "published_at": item.get("published_at"),
                 "author": item.get("author"),
+                "source_provenance": public_source_provenance(
+                    item.get("source_provenance")
+                ),
                 "contents": contents,
                 "content": "\n".join(contents),
             })
         return documents
 
     def resolve_evidence(self, query: str, meta: Dict[str, Any], search_fn):
-        if self.evidence_source in {"dataset", "local", "global"}:
+        if self.evidence_source == "dataset":
             return self.provided_evidence(meta)
         return search_fn(query)
         

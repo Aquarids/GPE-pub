@@ -48,6 +48,13 @@ def grouped_metrics(rows, include_category):
             float(row.get("poison_ratio", 0)),
             row.get("evidence_source", "dataset"),
         )
+        if row.get("evidence_source") == "global":
+            key += (
+                row.get("retrieval_source", "web"),
+                bool(row.get("include_distractors", False)),
+                row.get("retrieval_top_k"),
+                row.get("pool_top_k"),
+            )
         if include_category:
             key += (row.get("category") or "unknown",)
         groups[key].append(row)
@@ -61,8 +68,15 @@ def grouped_metrics(rows, include_category):
             "poison_ratio": ratio,
             "evidence_source": evidence_source,
         }
+        next_index = 4
+        if evidence_source == "global":
+            result["retrieval_source"] = key[next_index]
+            result["include_distractors"] = key[next_index + 1]
+            result["retrieval_top_k"] = key[next_index + 2]
+            result["pool_top_k"] = key[next_index + 3]
+            next_index += 4
         if include_category:
-            result["category"] = key[4]
+            result["category"] = key[next_index]
         result.update(summarize_results(items))
         output.append(result)
     return output
@@ -77,6 +91,10 @@ def summarize_results(rows):
     subclaim_usage = defaultdict(int)
     poisoned_count = 0
     evidence_count = 0
+    empty_evidence_count = 0
+    poison_only_count = 0
+    full_top_k_count = 0
+    top_k_case_count = 0
 
     for row in rows:
         gold = normalized_label(row.get("gold"))
@@ -85,8 +103,16 @@ def summarize_results(rows):
             overall_pairs.append((gold, predicted))
             overall_score += label_score(gold, predicted)
         add_usage(overall_usage, row.get("overall_usage"))
-        poisoned_count += int(row.get("poisoned_evidence_count", 0) or 0)
-        evidence_count += int(row.get("evidence_count", 0) or 0)
+        row_poisoned = int(row.get("poisoned_evidence_count", 0) or 0)
+        row_evidence = int(row.get("evidence_count", 0) or 0)
+        poisoned_count += row_poisoned
+        evidence_count += row_evidence
+        empty_evidence_count += row_evidence == 0
+        poison_only_count += row_evidence > 0 and row_poisoned == row_evidence
+        requested_top_k = row.get("retrieval_top_k")
+        if requested_top_k is not None:
+            top_k_case_count += 1
+            full_top_k_count += row_evidence >= int(requested_top_k)
 
         for item in row.get("subclaims", []) or []:
             subclaim_gold = normalized_label(item.get("gold"))
@@ -98,6 +124,10 @@ def summarize_results(rows):
 
     return {
         "actual_poison_ratio": poisoned_count / evidence_count if evidence_count else 0.0,
+        "mean_evidence_count": evidence_count / len(rows) if rows else 0.0,
+        "empty_evidence_rate": empty_evidence_count / len(rows) if rows else 0.0,
+        "poison_only_evidence_rate": poison_only_count / len(rows) if rows else 0.0,
+        "full_top_k_rate": full_top_k_count / top_k_case_count if top_k_case_count else None,
         "overall": metric_block(overall_pairs, overall_score, overall_usage),
         "subclaim": metric_block(subclaim_pairs, subclaim_score, subclaim_usage),
     }

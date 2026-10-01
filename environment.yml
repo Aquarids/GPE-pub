@@ -9,7 +9,7 @@ dependencies:
   - matplotlib
   - openai
   - pip:
-    - llm-pivot @ git+https://github.com/Aquarids/llm-pivot.git@v0.0.9
+    - aq-llm-pivot==0.1.0
     - python-dotenv
     - requests-cache
     - beautifulsoup4

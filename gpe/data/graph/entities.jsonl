@@ -22609,3 +22609,386 @@
 {"entity_id":"E22630","name":"Attribution Study Finds","type":"other","aliases":["Attribution Study Finds"],"count":1}
 {"entity_id":"E22631","name":"Heat Event Driven","type":"other","aliases":["Heat Event Driven"],"count":1}
 {"entity_id":"E22632","name":"Climate Analysis","type":"other","aliases":["Climate Analysis"],"count":1}
+{"entity_id":"E22633","name":"Egyptian pyramid construction","type":"concept","aliases":["Egyptian pyramid construction"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22634","name":"trained gladiators","type":"concept","aliases":["trained gladiators"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22640","name":"documented historical Mulan","type":"cultural_figure","aliases":["documented historical Mulan"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22641","name":"story of Mulan","type":"cultural_figure","aliases":["story of Mulan"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22644","name":"pandemic though transmission","type":"concept","aliases":["pandemic though transmission"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22646","name":"had no walls","type":"concept","aliases":["had no walls"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22649","name":"unexpected package","type":"concept","aliases":["unexpected package"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22651","name":"Unexpected package scams","type":"scam_type","aliases":["Unexpected package scams"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22652","name":"codes or fake","type":"concept","aliases":["codes or fake"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22653","name":"package you did","type":"concept","aliases":["package you did"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22654","name":"Receiving a","type":"concept","aliases":["Receiving a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22655","name":"brushing scam a","type":"scam_type","aliases":["brushing scam a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22658","name":"Legitimate delivery","type":"concept","aliases":["Legitimate delivery"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22659","name":"by going directly","type":"concept","aliases":["by going directly"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22660","name":"Checking a","type":"concept","aliases":["Checking a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22670","name":"Paying a","type":"concept","aliases":["Paying a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22671","name":"family bank","type":"concept","aliases":["family bank"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22672","name":"threatens arrest","type":"concept","aliases":["threatens arrest"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22675","name":"safer than calling a","type":"concept","aliases":["safer than calling a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22676","name":"phone number","type":"concept","aliases":["phone number"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22677","name":"abused by scammers","type":"scam_type","aliases":["abused by scammers"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22678","name":"as previous bank","type":"concept","aliases":["as previous bank"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22679","name":"trusting unexpected links","type":"concept","aliases":["trusting unexpected links"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22680","name":"banks are real","type":"concept","aliases":["banks are real"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22682","name":"should check recall","type":"concept","aliases":["should check recall"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22684","name":"Some dangerous foodborne","type":"concept","aliases":["Some dangerous foodborne"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22685","name":"of contaminated food","type":"concept","aliases":["of contaminated food"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22686","name":"taste or appearance","type":"concept","aliases":["taste or appearance"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22687","name":"undeclared allergen recall","type":"concept","aliases":["undeclared allergen recall"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22690","name":"by pathogens allergens","type":"concept","aliases":["by pathogens allergens"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22691","name":"affected by pathogens","type":"concept","aliases":["affected by pathogens"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22695","name":"reduce cross contamination","type":"concept","aliases":["reduce cross contamination"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22699","name":"multiply when perishable","type":"concept","aliases":["multiply when perishable"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22701","name":"is always safe","type":"concept","aliases":["is always safe"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22702","name":"produced while food","type":"concept","aliases":["produced while food"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22703","name":"ingredients storage temperature","type":"concept","aliases":["ingredients storage temperature"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22704","name":"increase overheating risk","type":"concept","aliases":["increase overheating risk"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22705","name":"Charging a","type":"concept","aliases":["Charging a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22707","name":"mobile phone charging","type":"technology","aliases":["mobile phone charging","phone charging"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22708","name":"into household trash","type":"concept","aliases":["into household trash"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22710","name":"e bike battery","type":"concept","aliases":["e bike battery"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22711","name":"scooter battery fires","type":"concept","aliases":["scooter battery fires"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22714","name":"detect dangerous carbon","type":"concept","aliases":["detect dangerous carbon"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22716","name":"Running a","type":"concept","aliases":["Running a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22717","name":"garage","type":"concept","aliases":["garage"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22718","name":"to reduce carbon","type":"concept","aliases":["to reduce carbon"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22721","name":"layout local code","type":"concept","aliases":["layout local code"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22722","name":"number of carbon","type":"concept","aliases":["number of carbon"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22726","name":"alarm chirps removing","type":"concept","aliases":["alarm chirps removing"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22727","name":"medical conditions may","type":"concept","aliases":["medical conditions may"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22728","name":"face higher heat","type":"concept","aliases":["face higher heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22729","name":"During a","type":"concept","aliases":["During a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22730","name":"is impossible indoors","type":"concept","aliases":["is impossible indoors"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22732","name":"conditioning cooling centers","type":"concept","aliases":["conditioning cooling centers"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22733","name":"centers shade hydration","type":"concept","aliases":["centers shade hydration"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22734","name":"help reduce heat","type":"concept","aliases":["help reduce heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22735","name":"their safety","type":"concept","aliases":["their safety"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22736","name":"some heat","type":"concept","aliases":["some heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22738","name":"dangerous quickly even","type":"concept","aliases":["dangerous quickly even"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22739","name":"child or pet","type":"concept","aliases":["child or pet"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22741","name":"Cracking a","type":"concept","aliases":["Cracking a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22743","name":"become hot","type":"concept","aliases":["become hot"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22745","name":"household bleach","type":"concept","aliases":["household bleach"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22747","name":"More disinfectant","type":"concept","aliases":["More disinfectant"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22749","name":"safe to mix","type":"concept","aliases":["safe to mix"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22753","name":"need poison control","type":"concept","aliases":["need poison control"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22754","name":"pod contents may","type":"concept","aliases":["pod contents may"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22755","name":"exposure","type":"concept","aliases":["exposure"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22756","name":"swallowed button","type":"concept","aliases":["swallowed button"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22758","name":"Keeping spare batteries","type":"concept","aliases":["Keeping spare batteries"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22759","name":"multiple strong magnets","type":"concept","aliases":["multiple strong magnets"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22760","name":"dangerous if multiple","type":"concept","aliases":["dangerous if multiple"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22761","name":"children s product","type":"concept","aliases":["children s product"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22764","name":"recall","type":"concept","aliases":["recall"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22765","name":"product recall","type":"concept","aliases":["product recall"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22766","name":"use personal","type":"concept","aliases":["use personal"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22768","name":"no identity","type":"concept","aliases":["no identity"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22772","name":"one breach more","type":"concept","aliases":["one breach more"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22774","name":"store unique passwords","type":"concept","aliases":["store unique passwords"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22775","name":"needs strong security","type":"concept","aliases":["needs strong security"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22776","name":"Whether a","type":"concept","aliases":["Whether a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22778","name":"open new credit","type":"concept","aliases":["open new credit"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22779","name":"Freezing credit","type":"concept","aliases":["Freezing credit"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22780","name":"vitamin A","type":"treatment","aliases":["vitamin A"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22781","name":"not prevent measles","type":"disease","aliases":["not prevent measles"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22782","name":"way vaccination","type":"concept","aliases":["way vaccination"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22783","name":"some measles","type":"disease","aliases":["some measles"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22785","name":"risk of measles","type":"disease","aliases":["risk of measles"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22787","name":"never get measles","type":"disease","aliases":["never get measles"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22789","name":"future COVID","type":"concept","aliases":["future COVID"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22790","name":"not prove masks","type":"concept","aliases":["not prove masks"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22791","name":"Some mask","type":"concept","aliases":["Some mask"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22792","name":"unproven diets supplements","type":"concept","aliases":["unproven diets supplements"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22793","name":"supplements or alternative","type":"concept","aliases":["supplements or alternative"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22794","name":"cancers within days","type":"disease","aliases":["cancers within days"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22799","name":"new experimental cancer","type":"disease","aliases":["new experimental cancer"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22800","name":"trial results cancer","type":"disease","aliases":["trial results cancer"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22801","name":"regulatory review","type":"concept","aliases":["regulatory review"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22802","name":"vary by cancer","type":"disease","aliases":["vary by cancer"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22804","name":"were only placebos","type":"concept","aliases":["were only placebos"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22805","name":"depression or anxiety","type":"concept","aliases":["depression or anxiety"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22807","name":"commonly described sunscreen","type":"concept","aliases":["commonly described sunscreen"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22808","name":"online sunscreen","type":"concept","aliases":["online sunscreen"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22809","name":"Some sunscreen","type":"concept","aliases":["Some sunscreen"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22810","name":"sunscreens","type":"concept","aliases":["sunscreens"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22812","name":"warn about heat","type":"concept","aliases":["warn about heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22813","name":"alcohol prevents heat","type":"concept","aliases":["alcohol prevents heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22814","name":"Drinking alcohol","type":"concept","aliases":["Drinking alcohol"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22815","name":"helps reduce heat","type":"concept","aliases":["helps reduce heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22816","name":"cooling rest","type":"concept","aliases":["cooling rest"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22817","name":"severe heat","type":"concept","aliases":["severe heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22818","name":"they are young","type":"concept","aliases":["they are young"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22819","name":"foodborne illness outbreaks","type":"concept","aliases":["foodborne illness outbreaks"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22820","name":"recalls kept food","type":"concept","aliases":["recalls kept food"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22821","name":"washing raw chicken","type":"concept","aliases":["washing raw chicken"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22823","name":"safe internal temperatures","type":"concept","aliases":["safe internal temperatures"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22824","name":"food to safe","type":"concept","aliases":["food to safe"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22825","name":"reduce foodborne","type":"concept","aliases":["reduce foodborne"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22826","name":"reported foodborne outbreak","type":"concept","aliases":["reported foodborne outbreak"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22827","name":"mean commercial detox","type":"concept","aliases":["mean commercial detox"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22828","name":"waste products but","type":"concept","aliases":["waste products but"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22829","name":"Some supplements","type":"concept","aliases":["Some supplements"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22830","name":"cured diabetes","type":"concept","aliases":["cured diabetes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22831","name":"universal instant cure","type":"concept","aliases":["universal instant cure"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22833","name":"cardiovascular outcomes kidney disease","type":"disease","aliases":["cardiovascular outcomes kidney disease"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22834","name":"of newer diabetes","type":"concept","aliases":["of newer diabetes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22835","name":"exposure networks during","type":"concept","aliases":["exposure networks during"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22836","name":"Mpox risk","type":"concept","aliases":["Mpox risk"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22839","name":"health response travel","type":"concept","aliases":["health response travel"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22840","name":"particular mpox","type":"concept","aliases":["particular mpox"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22841","name":"AI generated health","type":"concept","aliases":["AI generated health"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22842","name":"fabricated study","type":"concept","aliases":["fabricated study"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22843","name":"also hallucinate references","type":"concept","aliases":["also hallucinate references"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22846","name":"AI chatbot","type":"concept","aliases":["AI chatbot"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22847","name":"selfie","type":"concept","aliases":["selfie"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22850","name":"immigration enforcement operations","type":"policy_or_law","aliases":["immigration enforcement operations"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22854","name":"waste while critics","type":"concept","aliases":["waste while critics"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22856","name":"politically motivated purges","type":"concept","aliases":["politically motivated purges"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22859","name":"part of Gaza","type":"concept","aliases":["part of Gaza"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22860","name":"hostages","type":"concept","aliases":["hostages"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22862","name":"Ukraine while Ukraine","type":"concept","aliases":["Ukraine while Ukraine"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22863","name":"war against Ukraine","type":"concept","aliases":["war against Ukraine"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22864","name":"sought air defense","type":"concept","aliases":["sought air defense"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22865","name":"use of Western supplied","type":"concept","aliases":["use of Western supplied"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22866","name":"strikes inside Russia","type":"concept","aliases":["strikes inside Russia"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22868","name":"activity against Russian","type":"concept","aliases":["activity against Russian"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22869","name":"targets while Russia","type":"concept","aliases":["targets while Russia"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22870","name":"attacked any Russian","type":"concept","aliases":["attacked any Russian"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22872","name":"escalation risk defense","type":"concept","aliases":["escalation risk defense"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22873","name":"debates over Ukraine","type":"concept","aliases":["debates over Ukraine"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22877","name":"emissions while natural","type":"scientific_concept","aliases":["emissions while natural"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22882","name":"human caused climate","type":"scientific_concept","aliases":["human caused climate"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22884","name":"country disproves global","type":"concept","aliases":["country disproves global"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22885","name":"single cold","type":"concept","aliases":["single cold"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22886","name":"long term climate","type":"scientific_concept","aliases":["long term climate"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22889","name":"to track Earth s","type":"concept","aliases":["to track Earth s"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22891","name":"oceans cannot warm","type":"concept","aliases":["oceans cannot warm"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22893","name":"contribution to sea","type":"concept","aliases":["contribution to sea"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22895","name":"of some Antarctic","type":"concept","aliases":["of some Antarctic"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22896","name":"model uncertainty","type":"scientific_concept","aliases":["model uncertainty"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22897","name":"long term satellite","type":"concept","aliases":["long term satellite"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22898","name":"Arctic sea","type":"concept","aliases":["Arctic sea"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22901","name":"space mission","type":"event","aliases":["space mission"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22902","name":"rocket","type":"technology","aliases":["rocket"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22904","name":"researchers understand lunar","type":"concept","aliases":["researchers understand lunar"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22905","name":"future mission resources","type":"concept","aliases":["future mission resources"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22908","name":"lunar mission","type":"event","aliases":["lunar mission"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22909","name":"launch vehicle","type":"technology","aliases":["launch vehicle"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22910","name":"reveal solar system","type":"concept","aliases":["reveal solar system"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22911","name":"possible impact","type":"concept","aliases":["possible impact"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22913","name":"Earth asteroid risk","type":"concept","aliases":["Earth asteroid risk"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22914","name":"Near Earth asteroid","type":"concept","aliases":["Near Earth asteroid"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22916","name":"study primitive solar system","type":"concept","aliases":["study primitive solar system"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22917","name":"automatically prove life","type":"concept","aliases":["automatically prove life"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22918","name":"asteroid sample return","type":"concept","aliases":["asteroid sample return"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22920","name":"uncertain until laboratory","type":"concept","aliases":["uncertain until laboratory"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22921","name":"newly sampled asteroid","type":"concept","aliases":["newly sampled asteroid"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22922","name":"understanding of asteroid","type":"concept","aliases":["understanding of asteroid"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22923","name":"move any asteroid","type":"concept","aliases":["move any asteroid"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22925","name":"help researchers","type":"concept","aliases":["help researchers"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22927","name":"peer review","type":"practice","aliases":["peer review"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22928","name":"not automatically proof","type":"concept","aliases":["not automatically proof"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22929","name":"proof of causation","type":"concept","aliases":["proof of causation"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22930","name":"concerns about AI generated","type":"concept","aliases":["concerns about AI generated"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22931","name":"part of research integrity","type":"concept","aliases":["part of research integrity"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22932","name":"supremacy or quantum","type":"concept","aliases":["supremacy or quantum"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22934","name":"their immediate consumer","type":"concept","aliases":["their immediate consumer"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22935","name":"Some quantum","type":"concept","aliases":["Some quantum"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22936","name":"specific quantum computing","type":"concept","aliases":["specific quantum computing"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22938","name":"Quantum random","type":"concept","aliases":["Quantum random"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22939","name":"use quantum","type":"concept","aliases":["use quantum"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22940","name":"word quantum","type":"concept","aliases":["word quantum"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22941","name":"achieved technical milestones","type":"concept","aliases":["achieved technical milestones"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22942","name":"commercial fusion","type":"concept","aliases":["commercial fusion"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22943","name":"fusion energy","type":"concept","aliases":["fusion energy"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22944","name":"plasma or energy","type":"concept","aliases":["plasma or energy"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22946","name":"commercially competitive fusion","type":"concept","aliases":["commercially competitive fusion"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22947","name":"nuclear fission","type":"concept","aliases":["nuclear fission"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22948","name":"Nuclear fusion","type":"concept","aliases":["Nuclear fusion"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22953","name":"power are variable","type":"concept","aliases":["power are variable"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22955","name":"birds bats landscapes","type":"concept","aliases":["birds bats landscapes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22956","name":"worse than fossil","type":"concept","aliases":["worse than fossil"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22957","name":"Some wind","type":"concept","aliases":["Some wind"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22958","name":"chemistry recycling energy","type":"concept","aliases":["chemistry recycling energy"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22959","name":"specific battery","type":"concept","aliases":["specific battery"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22960","name":"mining practices","type":"concept","aliases":["mining practices"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22961","name":"generation manufacturing battery","type":"concept","aliases":["generation manufacturing battery"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22962","name":"produce no emissions","type":"scientific_concept","aliases":["produce no emissions"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22963","name":"their total climate","type":"scientific_concept","aliases":["their total climate"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22965","name":"of major earthquakes","type":"concept","aliases":["of major earthquakes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22969","name":"term precise earthquake","type":"concept","aliases":["term precise earthquake"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22970","name":"have higher earthquake","type":"concept","aliases":["have higher earthquake"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22971","name":"of large earthquakes","type":"concept","aliases":["of large earthquakes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22972","name":"of tectonic plate","type":"concept","aliases":["of tectonic plate"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22973","name":"affect climate","type":"scientific_concept","aliases":["affect climate"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22977","name":"satellite observation","type":"technology","aliases":["satellite observation","satellite observations"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22978","name":"volcanic ash","type":"scientific_concept","aliases":["volcanic ash"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22979","name":"stop hurricanes","type":"concept","aliases":["stop hurricanes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22980","name":"climate change invasive","type":"scientific_concept","aliases":["climate change invasive"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22981","name":"habitat change climate","type":"scientific_concept","aliases":["habitat change climate"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22984","name":"lost species","type":"concept","aliases":["lost species"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22985","name":"recreating a","type":"concept","aliases":["recreating a"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22986","name":"proposed de extinction","type":"concept","aliases":["proposed de extinction"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22987","name":"unaffected by warming","type":"scientific_concept","aliases":["unaffected by warming"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22988","name":"by warming oceans","type":"scientific_concept","aliases":["by warming oceans"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22990","name":"harm marine","type":"concept","aliases":["harm marine"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22995","name":"ordinary airplane contrails","type":"concept","aliases":["ordinary airplane contrails"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E22999","name":"any future large scale","type":"concept","aliases":["any future large scale"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23000","name":"large scale solar","type":"concept","aliases":["large scale solar"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23001","name":"presence at L Anse","type":"concept","aliases":["presence at L Anse"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23002","name":"Anse aux Meadows","type":"concept","aliases":["Anse aux Meadows"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23004","name":"than forty million","type":"concept","aliases":["than forty million"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23006","name":"delivered package","type":"concept","aliases":["delivered package"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23008","name":"unsolicited bank","type":"concept","aliases":["unsolicited bank"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23009","name":"foodborne illness","type":"disease","aliases":["foodborne illness"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23010","name":"safe to eat","type":"concept","aliases":["safe to eat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23011","name":"several days","type":"concept","aliases":["several days"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23012","name":"Long term global","type":"concept","aliases":["Long term global"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23016","name":"Gladiatorial","type":"concept","aliases":["Gladiatorial"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23017","name":"death","type":"concept","aliases":["death"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23018","name":"Roman","type":"historical_period","aliases":["Roman"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23019","name":"mixed","type":"concept","aliases":["mixed"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23020","name":"Mulan's","type":"cultural_figure","aliases":["Mulan's"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23021","name":"historians","type":"concept","aliases":["historians"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23022","name":"Mongol","type":"concept","aliases":["Mongol"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23023","name":"Some","type":"concept","aliases":["Some"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23024","name":"Constantinople fell","type":"concept","aliases":["Constantinople fell"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23025","name":"Constantinople's","type":"concept","aliases":["Constantinople's"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23026","name":"QR code","type":"concept","aliases":["QR code"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23027","name":"surprise","type":"concept","aliases":["surprise"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23028","name":"SMS","type":"concept","aliases":["SMS"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23029","name":"Safe","type":"concept","aliases":["Safe"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23030","name":"fake","type":"concept","aliases":["fake"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23031","name":"real","type":"concept","aliases":["real"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23032","name":"scam","type":"scam_type","aliases":["scam"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23033","name":"Scammers","type":"scam_type","aliases":["Scammers"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23034","name":"Personal","type":"concept","aliases":["Personal"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23035","name":"data","type":"concept","aliases":["data"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23036","name":"Scams","type":"scam_type","aliases":["Scams"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23037","name":"Gift","type":"concept","aliases":["Gift"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23038","name":"Nation","type":"concept","aliases":["Nation"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23039","name":"Bank","type":"concept","aliases":["Bank"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23040","name":"food recall","type":"concept","aliases":["food recall"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23041","name":"Consumers","type":"concept","aliases":["Consumers"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23042","name":"food","type":"concept","aliases":["food"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23043","name":"Recalls","type":"concept","aliases":["Recalls"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23044","name":"Early","type":"concept","aliases":["Early"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23045","name":"Raw chicken","type":"concept","aliases":["Raw chicken"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23046","name":"Wash","type":"concept","aliases":["Wash"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23047","name":"Using","type":"concept","aliases":["Using"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23048","name":"Cooking","type":"concept","aliases":["Cooking"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23049","name":"Eat","type":"concept","aliases":["Eat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23050","name":"Leftovers","type":"concept","aliases":["Leftovers"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23051","name":"Causes","type":"concept","aliases":["Causes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23052","name":"Lithium","type":"concept","aliases":["Lithium"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23053","name":"consumer safety","type":"concept","aliases":["consumer safety"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23054","name":"Carbon","type":"concept","aliases":["Carbon"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23055","name":"You","type":"concept","aliases":["You"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23056","name":"Generators","type":"concept","aliases":["Generators"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23057","name":"Use","type":"concept","aliases":["Use"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23058","name":"placement","type":"concept","aliases":["placement"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23059","name":"Smoke","type":"concept","aliases":["Smoke"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23060","name":"ISS","type":"concept","aliases":["ISS"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23061","name":"Heat","type":"concept","aliases":["Heat"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23062","name":"Fans","type":"concept","aliases":["Fans"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23063","name":"parked car","type":"concept","aliases":["parked car"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23064","name":"Even","type":"concept","aliases":["Even"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23065","name":"car","type":"concept","aliases":["car"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23066","name":"ammonia","type":"concept","aliases":["ammonia"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23067","name":"Chemica","type":"concept","aliases":["Chemica"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23068","name":"Natural","type":"concept","aliases":["Natural"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23069","name":"children","type":"concept","aliases":["children"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23070","name":"Laundry","type":"concept","aliases":["Laundry"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23071","name":"drink","type":"concept","aliases":["drink"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23072","name":"Checking","type":"concept","aliases":["Checking"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23073","name":"product","type":"concept","aliases":["product"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23074","name":"Identity","type":"concept","aliases":["Identity"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23075","name":"Changing","type":"concept","aliases":["Changing"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23076","name":"Our","type":"concept","aliases":["Our"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23077","name":"reduce account takeover risk","type":"concept","aliases":["reduce account takeover risk"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23078","name":"Password","type":"concept","aliases":["Password"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23079","name":"Breach","type":"concept","aliases":["Breach"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23080","name":"Mass","type":"concept","aliases":["Mass"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23081","name":"public","type":"concept","aliases":["public"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23082","name":"raw milk","type":"concept","aliases":["raw milk"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23083","name":"baking","type":"concept","aliases":["baking"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23084","name":"Cures","type":"concept","aliases":["Cures"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23085","name":"chemotherapy","type":"treatment","aliases":["chemotherapy"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23086","name":"apricot","type":"concept","aliases":["apricot"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23087","name":"mammograms","type":"concept","aliases":["mammograms"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23088","name":"Antidepressants","type":"concept","aliases":["Antidepressants"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23089","name":"does","type":"concept","aliases":["does"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23090","name":"bacteria","type":"concept","aliases":["bacteria"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23091","name":"claims","type":"concept","aliases":["claims"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23092","name":"Potential","type":"concept","aliases":["Potential"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23093","name":"vaccine","type":"treatment","aliases":["vaccine"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23094","name":"AI's","type":"concept","aliases":["AI's"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23095","name":"Over","type":"concept","aliases":["Over"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23096","name":"Online","type":"concept","aliases":["Online"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23097","name":"birthright citizenship","type":"policy_or_law","aliases":["birthright citizenship"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23098","name":"critics","type":"concept","aliases":["critics"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23099","name":"government efficiency initiative","type":"concept","aliases":["government efficiency initiative"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23100","name":"Government Efficiency's","type":"concept","aliases":["Government Efficiency's"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23101","name":"Legal","type":"concept","aliases":["Legal"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23102","name":"opponents","type":"concept","aliases":["opponents"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23103","name":"President","type":"concept","aliases":["President"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23104","name":"October","type":"concept","aliases":["October"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23105","name":"Ukraine s","type":"concept","aliases":["Ukraine s"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23106","name":"Late","type":"concept","aliases":["Late"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23107","name":"Western","type":"concept","aliases":["Western"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23108","name":"battlefield","type":"concept","aliases":["battlefield"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23109","name":"analysts","type":"concept","aliases":["analysts"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23110","name":"climate","type":"scientific_concept","aliases":["climate"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23111","name":"Earth s","type":"concept","aliases":["Earth s"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23112","name":"industrial","type":"concept","aliases":["industrial"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23113","name":"Changes","type":"concept","aliases":["Changes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23114","name":"Because","type":"concept","aliases":["Because"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23115","name":"scenarios","type":"concept","aliases":["scenarios"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23116","name":"they","type":"concept","aliases":["they"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23117","name":"ocean","type":"concept","aliases":["ocean"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23118","name":"Water's","type":"concept","aliases":["Water's"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23119","name":"polar","type":"concept","aliases":["polar"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23120","name":"decline","type":"concept","aliases":["decline"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23121","name":"Artemis","type":"concept","aliases":["Artemis"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23122","name":"government","type":"concept","aliases":["government"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23123","name":"Scientific","type":"concept","aliases":["Scientific"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23124","name":"Moon's","type":"concept","aliases":["Moon's"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23125","name":"asteroid","type":"concept","aliases":["asteroid"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23126","name":"nonzero","type":"concept","aliases":["nonzero"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23127","name":"asteroids","type":"concept","aliases":["asteroids"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23128","name":"Planetary defense","type":"concept","aliases":["Planetary defense"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23129","name":"artificial intelligence","type":"scientific_concept","aliases":["artificial intelligence","AI"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23130","name":"quantum","type":"concept","aliases":["quantum"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23131","name":"Techn","type":"concept","aliases":["Techn"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23132","name":"Fusion","type":"concept","aliases":["Fusion"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23133","name":"energy","type":"concept","aliases":["energy"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23134","name":"renewable energy","type":"concept","aliases":["renewable energy"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23135","name":"grid","type":"concept","aliases":["grid"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23136","name":"Solar","type":"concept","aliases":["Solar"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23137","name":"variability","type":"concept","aliases":["variability"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23138","name":"lithium batteries","type":"concept","aliases":["lithium batteries"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23139","name":"Scientists","type":"concept","aliases":["Scientists"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23140","name":"astrology","type":"concept","aliases":["astrology"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23141","name":"Earthquake early warning","type":"concept","aliases":["Earthquake early warning"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23142","name":"greenhouse","type":"concept","aliases":["greenhouse"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23143","name":"Volcanic","type":"concept","aliases":["Volcanic"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23144","name":"volcanoes","type":"concept","aliases":["volcanoes"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23145","name":"biodiversity","type":"concept","aliases":["biodiversity"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23146","name":"De extinction","type":"concept","aliases":["De extinction"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23147","name":"Coral","type":"concept","aliases":["Coral"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23148","name":"Plastic","type":"concept","aliases":["Plastic"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23149","name":"Microplastics","type":"concept","aliases":["Microplastics"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23150","name":"Eco","type":"concept","aliases":["Eco"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23151","name":"MPs","type":"concept","aliases":["MPs"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23152","name":"Pro","type":"concept","aliases":["Pro"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23153","name":"research","type":"concept","aliases":["research"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23154","name":"Discussi","type":"concept","aliases":["Discussi"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23155","name":"Indigenous","type":"concept","aliases":["Indigenous"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23156","name":"More","type":"concept","aliases":["More"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23157","name":"brushing scam","type":"scam_type","aliases":["brushing scam"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23158","name":"one","type":"concept","aliases":["one"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23159","name":"Tianwen-2's","type":"concept","aliases":["Tianwen-2's"],"count":0,"provenance":"claim_concept_backfill"}
+{"entity_id":"E23160","name":"New","type":"concept","aliases":["New"],"count":0,"provenance":"claim_concept_backfill"}

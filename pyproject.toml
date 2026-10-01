@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gpe-eval"
-version = "0.2.0"
-description = "GPE evaluation, KnownGraph queries, and evidence retrieval"
+version = "0.2.1"
+description = "GPE benchmark evaluation, source-aware retrieval, and controlled evidence poisoning"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -28,4 +28,4 @@ dependencies = [
 include = ["gpe*"]
 
 [tool.setuptools.package-data]
-gpe = ["data/*.jsonl", "data/graph/*.jsonl"]
+gpe = ["data/*.jsonl", "data/*.json", "data/graph/*.jsonl"]

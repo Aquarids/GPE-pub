@@ -39,6 +39,8 @@ class DDG:
                     backend=self.backend,
                 )
         except Exception as error:
+            if "no results found" in str(error).casefold():
+                return []
             self.last_error = f"DDG search failed: {type(error).__name__}: {error}"
             LOGGER.warning("%s query=%r", self.last_error, query)
             raise SearchProviderError("ddg", "search request failed", error, query=query) from error

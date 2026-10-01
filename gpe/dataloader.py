@@ -51,15 +51,6 @@ class ClaimLoader:
             for item in environment.get("benign") or record.get("evidence") or []
         ]
 
-    def related_distractors(self, claim_id):
-        """Return entity-related, claim-irrelevant evidence for retrieval."""
-        record = self._record(claim_id)
-        environment = record.get("evidence_environment") or {}
-        return [
-            {**item, "evidence_type": "related_distractor", "contents": []}
-            for item in environment.get("related_distractor") or []
-        ]
-
     def _record(self, claim_id):
         key = str(claim_id)
         if key not in self.by_claim_id:
@@ -83,6 +74,7 @@ class DatasetEvidenceLoader:
         poison_cache=None,
         generate_missing_poison=False,
     ):
+        record = self.claim_loader._record(claim_id)
         benign = [
             copy_evidence(item)
             for item in self.claim_loader.benign_evidence(claim_id)
@@ -97,32 +89,7 @@ class DatasetEvidenceLoader:
             )
 
         selected_benign = benign[:target_total]
-        return self.mix_selected_evidence(
-            claim_id,
-            selected_benign,
-            poison_ratio=ratio,
-            attack_type=attack_type,
-            seed=seed,
-            poison_cache=poison_cache,
-            generate_missing_poison=generate_missing_poison,
-        )
-
-    def mix_selected_evidence(
-        self,
-        claim_id,
-        benign,
-        poison_ratio=0.0,
-        attack_type=None,
-        seed=0,
-        poison_cache=None,
-        generate_missing_poison=False,
-    ):
-        """Replace selected benign records with poison while preserving list size."""
-        record = self.claim_loader._record(claim_id)
-        selected_benign = [copy_evidence(item) for item in benign]
-        target_total = len(selected_benign)
-        ratio = clamp_ratio(poison_ratio)
-        if ratio <= 0.0 or target_total == 0:
+        if ratio <= 0.0:
             return selected_benign
 
         attack_type = normalize_attack_type(attack_type)
@@ -139,7 +106,11 @@ class DatasetEvidenceLoader:
             )
             self.poison_by_claim_id = poison_cache.by_claim_id
 
-        poison = self._poison_candidates(claim_id, attack_type)
+        poison = self._poison_candidates(
+            claim_id,
+            attack_type,
+            max_budget=target_total,
+        )
         rng = random.Random(f"{seed}:{claim_id}:{attack_type or ''}:{ratio}:{target_total}")
         if attack_type == "ata":
             return self._replace_ata(selected_benign, poison, poison_count)
@@ -171,18 +142,30 @@ class DatasetEvidenceLoader:
             mixed[position] = by_source[source_id]
         return mixed
 
-    def _poison_candidates(self, claim_id, attack_type):
+    def _poison_candidates(self, claim_id, attack_type, max_budget=None):
         attack_type = normalize_attack_type(attack_type)
         candidates = self.poison_by_claim_id.get(str(claim_id), [])
-        return [
+        candidates = [
             copy_evidence(item)
             for item in candidates
             if attack_type is None
             or normalize_attack_type(item.get("attack_type")) == attack_type
         ]
+        return candidates if max_budget is None else candidates[:max_budget]
 
     def _load_poison(self, path):
         by_claim_id = {}
+        seen = set()
+
+        def add(claim_id, evidence):
+            evidence_id = str(evidence.get("evidence_id") or "")
+            identity = (str(claim_id), evidence_id)
+            if evidence_id and identity in seen:
+                return
+            by_claim_id.setdefault(str(claim_id), []).append(evidence)
+            if evidence_id:
+                seen.add(identity)
+
         for record in self.claim_loader.records:
             claim_id = str(record.get("claim_id") or "")
             environment = record.get("evidence_environment") or {}
@@ -192,7 +175,7 @@ class DatasetEvidenceLoader:
                     evidence = dict(item)
                     evidence.setdefault("claim_id", claim_id)
                     evidence.setdefault("attack_type", normalize_attack_type(attack_type))
-                    by_claim_id.setdefault(claim_id, []).append(evidence)
+                    add(claim_id, evidence)
         for poison_path in dict.fromkeys(normalize_poison_paths(path).values()):
             if not poison_path.exists():
                 continue
@@ -206,7 +189,7 @@ class DatasetEvidenceLoader:
                     evidence.setdefault("claim_id", claim_id)
                     if record.get("attack_type") and not evidence.get("attack_type"):
                         evidence["attack_type"] = record["attack_type"]
-                    by_claim_id.setdefault(str(claim_id), []).append(evidence)
+                    add(claim_id, evidence)
         return by_claim_id
 
 

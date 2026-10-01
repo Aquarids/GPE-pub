@@ -7,6 +7,7 @@ class IgnoreInjection(BaseAttack):
 
     def generate_poison_contents(self, query, label, n_content, category=None, extra=None):
         target_label = opposite_label(label)
+        start = int((extra or {}).get("start_index", 1))
         return [
             {
                 "target_label": target_label,
@@ -23,7 +24,7 @@ class IgnoreInjection(BaseAttack):
                 "publish_date": "2026-01-01",
                 "source": "Official Document Review",
             }
-            for index in range(1, n_content + 1)
+            for index in range(start, start + n_content)
         ]
 
 

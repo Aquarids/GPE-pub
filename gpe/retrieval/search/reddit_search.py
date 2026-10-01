@@ -16,7 +16,7 @@ class RedditSearch(DDGBaseSearch):
     def search(self, query, top_k=5, suffix=None, **kwargs) -> list[Document]:
         if suffix is None:
             suffix = self.DEFAULT_SUFFIX
-        kwargs.setdefault("allow_snippet_fallback", True)
+        self.extra.setdefault("allow_snippet_fallback", True)
         documents = super().search(query, top_k=top_k, suffix=suffix, **kwargs)
         for document in documents:
             document.source_name = self.get_source_name()

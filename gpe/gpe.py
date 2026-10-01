@@ -5,8 +5,9 @@ from gpe.methods import DETECTORS
 from gpe.metrics import Evaluator, label_score, token_efficiency
 from gpe.reporting import compute_metrics_from_jsonl
 from gpe.search import Searcher
-from gpe.poison import PoisonCache
+from gpe.poison import PoisonCache, normalize_poison_paths
 from gpe.resources import GPE_DATA_PATH
+from gpe.retrieval.source_scope import public_evidence_view
 
 
 class GPE:
@@ -26,8 +27,10 @@ class GPE:
         self.logger = logger
         self.claims = ClaimLoader(self.data_path)
         self.evidence = DatasetEvidenceLoader(self.data_path, poison_path)
+        prepared_poison_paths = [self.data_path]
+        prepared_poison_paths.extend(normalize_poison_paths(poison_path).values())
         self.poison_cache = PoisonCache(
-            poison_path or self.data_path,
+            prepared_poison_paths,
             dynamic_path=dynamic_poison_path,
             llm=llm,
             logger=logger,
@@ -48,10 +51,14 @@ class GPE:
             raise KeyError(f"unknown method: {name}; available={sorted(DETECTORS)}")
         return DETECTORS[name](self.logger, self.llm, config or {})
 
-    def predict(self, method, claim, evidence=None, method_config=None):
+    def predict(self, method, claim, evidence=None, method_config=None, source_scope="web"):
         """Run one built-in method on a claim and return prediction plus token usage."""
         detector = self.create_method(method, method_config)
-        prediction, usage = run_prediction(detector, self.llm, claim, evidence or [])
+        visible_evidence = [
+            public_evidence_view(item, source_scope)
+            for item in (evidence or [])
+        ]
+        prediction, usage = run_prediction(detector, self.llm, claim, visible_evidence)
         return {"method": method, "prediction": prediction, "usage": usage}
 
     def predict_claim(
@@ -63,8 +70,9 @@ class GPE:
         attack_type=None,
         top_k=None,
         seed=0,
-        generate_missing_poison=True,
+        generate_missing_poison=False,
         method_config=None,
+        retrieval_source="web",
     ):
         """Run one built-in method on a benchmark claim with dataset or external-search evidence."""
         claim = self.claims.get_claim(claim_id)
@@ -81,7 +89,13 @@ class GPE:
             )
         config = dict(method_config or {})
         config["evidence_source"] = evidence_source
-        result = self.predict(method, claim["original_claim"], evidence=evidence, method_config=config)
+        result = self.predict(
+            method,
+            claim["original_claim"],
+            evidence=evidence,
+            method_config=config,
+            source_scope=retrieval_source,
+        )
         result.update({"claim_id": claim_id, "evidence_source": evidence_source, "poison_ratio": poison_ratio, "attack_type": attack_type})
         return result
 

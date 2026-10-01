@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from gpe.graph import GPEKnowledgeGraph
-from gpe.retrieval import EvidenceRetriever
+from gpe.retrieval import EvidenceRetriever, list_source_scopes
 
 
 def summarize_results(results):
@@ -32,6 +32,8 @@ def main():
     parser.add_argument("--query", default="steel production emissions")
     parser.add_argument("--claim-id", default="benchmark-000001")
     parser.add_argument("--top-k", type=int, default=3)
+    parser.add_argument("--source-scope", choices=list_source_scopes(), default="web")
+    parser.add_argument("--include-distractors", action="store_true")
     args = parser.parse_args()
 
     graph = GPEKnowledgeGraph()
@@ -39,27 +41,34 @@ def main():
     print(json.dumps(graph.find_entities(args.entity, limit=args.top_k), ensure_ascii=False, indent=2))
     print(json.dumps(graph.claim_context(args.claim_id), ensure_ascii=False, indent=2))
 
-    retriever = EvidenceRetriever()
+    evidence_types = {"benign"}
+    if args.include_distractors:
+        evidence_types.add("related_distractor")
+    retriever = EvidenceRetriever(evidence_types=evidence_types)
     local_results = retriever.search(
         args.query,
         top_k=args.top_k,
         claim_id=args.claim_id,
         filter_benign=False,
+        source_scope=args.source_scope,
     )
     global_results = retriever.search(
         args.query,
         top_k=args.top_k,
         filter_benign=False,
+        source_scope=args.source_scope,
     )
     print(json.dumps({
         "scope": "claim",
         "claim_id": args.claim_id,
         "query": args.query,
+        "source_scope": args.source_scope,
         "results": summarize_results(local_results),
     }, ensure_ascii=False, indent=2))
     print(json.dumps({
         "scope": "global",
         "query": args.query,
+        "source_scope": args.source_scope,
         "results": summarize_results(global_results),
     }, ensure_ascii=False, indent=2))
 

@@ -7,6 +7,12 @@ from gpe.dataloader import ClaimLoader, DatasetEvidenceLoader, read_jsonl
 from gpe.metrics import Evaluator
 from gpe.poison import PoisonCache
 from gpe.retrieval.evidence_retrieval import EvidenceRetriever
+from gpe.retrieval.source_scope import (
+    matches_source_scope,
+    project_poisoned_item,
+    public_evidence_view,
+    source_provenance,
+)
 
 
 @dataclass(frozen=True)
@@ -21,8 +27,9 @@ class EvidenceRequest:
     retrieval_data_path: str | None = None
     retrieval_candidate_k: int = 30
     filter_benign: bool = False
-    exclude_related_distractors: bool = False
     pool_top_k: int | None = None
+    retrieval_source: str = "web"
+    include_distractors: bool = False
 
 
 @dataclass
@@ -43,7 +50,6 @@ class EvaluationPipeline:
         llm,
         poison_cache: PoisonCache | None = None,
         global_pool=None,
-        claim_pool=None,
     ):
         self.claims = claims
         self.evidence = evidence
@@ -51,13 +57,24 @@ class EvaluationPipeline:
         self.llm = llm
         self.poison_cache = poison_cache
         self.global_pool = global_pool or GlobalEvidencePool(claims, evidence, poison_cache)
-        self.claim_pool = claim_pool or ClaimEvidencePool(claims, evidence, poison_cache)
 
     def evaluate(self, case: EvaluationCase):
         claim = self.claims.get_claim(case.claim_id)
         before = self.llm.usage_snapshot()
         evidence_items = self.resolve_evidence(case.claim_id, case.evidence)
-        visible_evidence = evidence_items if case.evidence.source != "search" else []
+        visible_evidence = (
+            [
+                public_evidence_view(
+                    item,
+                    case.evidence.retrieval_source
+                    if case.evidence.source == "global"
+                    else "web",
+                )
+                for item in evidence_items
+            ]
+            if case.evidence.source != "search"
+            else []
+        )
         prediction, _ = run_prediction(
             case.detector,
             self.llm,
@@ -73,11 +90,13 @@ class EvaluationPipeline:
             "attack_type": case.evidence.attack_type,
             "poison_ratio": case.evidence.poison_ratio,
             "evidence_source": case.evidence.source,
-            "retrieval_mode": case.evidence.retrieval_mode if is_retrieval_source(case.evidence.source) else None,
-            "retrieval_top_k": case.evidence.top_k if is_retrieval_source(case.evidence.source) else None,
-            "retrieval_candidate_k": case.evidence.retrieval_candidate_k if is_retrieval_source(case.evidence.source) else None,
-            "pool_top_k": effective_pool_top_k(case.evidence) if is_retrieval_source(case.evidence.source) else None,
-            "retrieval_pool_size": self._pool_size(case.claim_id, case.evidence),
+            "retrieval_mode": case.evidence.retrieval_mode if case.evidence.source == "global" else None,
+            "retrieval_top_k": case.evidence.top_k if case.evidence.source == "global" else None,
+            "retrieval_candidate_k": case.evidence.retrieval_candidate_k if case.evidence.source == "global" else None,
+            "pool_top_k": case.evidence.pool_top_k if case.evidence.source == "global" else None,
+            "retrieval_source": case.evidence.retrieval_source if case.evidence.source == "global" else None,
+            "include_distractors": case.evidence.include_distractors if case.evidence.source == "global" else None,
+            "retrieval_pool_size": self.global_pool.size(case.evidence) if case.evidence.source == "global" else None,
             "evidence_count": len(evidence_items),
             "poisoned_evidence_count": sum(bool(item.get("poisoned")) for item in evidence_items),
             "evidence_ids": [item.get("evidence_id") for item in evidence_items],
@@ -102,11 +121,8 @@ class EvaluationPipeline:
         if request.source == "global":
             claim = self.claims.get_claim(claim_id)
             return self.global_pool.search(claim["original_claim"], request, self.llm)
-        if request.source == "local":
-            claim = self.claims.get_claim(claim_id)
-            return self.claim_pool.search(claim_id, claim["original_claim"], request, self.llm)
         if request.source != "dataset":
-            raise ValueError("evidence source must be dataset, local, global, or search")
+            raise ValueError("evidence source must be dataset, global, or search")
         return self.evidence.get_evidence_list(
             claim_id,
             top_k=request.top_k,
@@ -116,13 +132,6 @@ class EvaluationPipeline:
             poison_cache=self.poison_cache,
             generate_missing_poison=request.generate_missing_poison,
         )
-
-    def _pool_size(self, claim_id, request):
-        if request.source == "global":
-            return self.global_pool.size(request)
-        if request.source == "local":
-            return self.claim_pool.size(claim_id, request)
-        return None
 
     def evaluate_subclaims(self, detector, claim_id, evidence):
         results = []
@@ -145,149 +154,139 @@ class EvaluationPipeline:
         return results
 
 
-class ConditionedEvidencePool:
-    def __init__(self, claims, evidence, poison_cache):
+class GlobalEvidencePool:
+    def __init__(self, claims, evidence, poison_cache, claim_ids=None):
         self.claims = claims
         self.evidence = evidence
         self.poison_cache = poison_cache
+        self.claim_ids = {str(value) for value in claim_ids} if claim_ids is not None else None
         self.retrievers = {}
         self.retrieval_metadata = {}
         self.lock = threading.Lock()
 
-    def _search(self, retriever, query, request, llm):
-        return retriever.search(
+    def search(self, query, request, llm):
+        retriever = self._retriever(request)
+        results = retriever.search(
             query,
             top_k=request.top_k or 3,
             filter_benign=request.filter_benign,
             mode=request.retrieval_mode,
             llm=llm,
             candidate_k=request.retrieval_candidate_k,
-            exclude_related_distractors=request.exclude_related_distractors,
+            source_scope=request.retrieval_source,
+        )
+        projected = []
+        for item in results:
+            item = project_poisoned_item(item, request.retrieval_source)
+            item["source_provenance"] = source_provenance(
+                item, request.retrieval_source
+            )
+            projected.append(item)
+        return projected
+
+    def size(self, request):
+        return self._retriever(request).count(
+            source_scope=request.retrieval_source,
+            filter_benign=request.filter_benign,
         )
 
-    def _condition_key(self, request):
-        return (
+    def _retriever(self, request):
+        pool_top_k = request.pool_top_k if request.pool_top_k is not None else request.top_k
+        key = (
             float(request.poison_ratio),
             request.attack_type,
             request.seed,
-            effective_pool_top_k(request),
+            pool_top_k,
             request.retrieval_data_path,
+            request.include_distractors,
+            request.retrieval_source,
         )
-
-    def _claim_documents(self, claim_id, request):
-        metadata = self._load_retrieval_metadata(request.retrieval_data_path)
-        documents = []
-        for item in self.evidence.get_evidence_list(
-            claim_id,
-            top_k=effective_pool_top_k(request),
-            poison_ratio=request.poison_ratio,
-            attack_type=request.attack_type,
-            seed=request.seed,
-            poison_cache=self.poison_cache,
-            generate_missing_poison=request.generate_missing_poison,
-        ):
-            item["claim_id"] = claim_id
-            item_metadata = metadata.get((str(claim_id), str(item.get("evidence_id"))))
-            if item_metadata:
-                item["retrieval"] = item_metadata
-            documents.append(item)
-        for item in self.claims.related_distractors(claim_id):
-            item["claim_id"] = claim_id
-            documents.append(item)
-        return documents
-
-    def _benign_claim_documents(self, claim_id, request):
-        metadata = self._load_retrieval_metadata(request.retrieval_data_path)
-        documents = []
-        for item in self.claims.benign_evidence(claim_id):
-            item = dict(item)
-            item["claim_id"] = claim_id
-            item_metadata = metadata.get((str(claim_id), str(item.get("evidence_id"))))
-            if item_metadata:
-                item["retrieval"] = item_metadata
-            documents.append(item)
-        for item in self.claims.related_distractors(claim_id):
-            item["claim_id"] = claim_id
-            documents.append(item)
-        return documents
-
-    def _load_retrieval_metadata(self, path):
-        if not path:
-            return {}
-        key = str(path)
-        if key not in self.retrieval_metadata:
-            metadata = {}
-            for record in read_jsonl(path):
-                claim_id = str(record.get("claim_id") or "")
-                environment = record.get("evidence_environment") or {}
-                groups = [environment.get("benign") or []]
-                groups.extend((environment.get("poisoned") or {}).values())
-                for items in groups:
-                    for item in items or []:
-                        values = item.get("retrieval")
-                        if values:
-                            metadata[(claim_id, str(item.get("evidence_id")))] = values
-            self.retrieval_metadata[key] = metadata
-        return self.retrieval_metadata[key]
-
-
-class GlobalEvidencePool(ConditionedEvidencePool):
-    def search(self, query, request, llm):
-        return self._search(self._retriever(request), query, request, llm)
-
-    def size(self, request):
-        return len(self._retriever(request).documents)
-
-    def _retriever(self, request):
-        key = self._condition_key(request)
         with self.lock:
             if key not in self.retrievers:
+                self._load_retrieval_metadata(request.retrieval_data_path)
                 documents = []
                 for claim in self.claims.list_claims():
-                    documents.extend(self._claim_documents(claim["claim_id"], request))
+                    claim_id = claim["claim_id"]
+                    if self.claim_ids is not None and str(claim_id) not in self.claim_ids:
+                        continue
+                    existing_identities = set()
+                    for item in self.evidence.get_evidence_list(
+                        claim_id,
+                        top_k=pool_top_k,
+                        poison_ratio=request.poison_ratio,
+                        attack_type=request.attack_type,
+                        seed=request.seed,
+                        poison_cache=self.poison_cache,
+                        generate_missing_poison=request.generate_missing_poison,
+                    ):
+                        item["claim_id"] = claim_id
+                        metadata = self.retrieval_metadata.get((str(claim_id), str(item.get("evidence_id"))))
+                        if metadata:
+                            item["retrieval"] = metadata
+                        documents.append(item)
+                        existing_identities.add((
+                            str(item.get("evidence_id") or ""),
+                            str(item.get("url") or ""),
+                        ))
+                    if request.retrieval_source != "web":
+                        for item in self.claims.benign_evidence(claim_id):
+                            if not matches_source_scope(
+                                item,
+                                request.retrieval_source,
+                                include_poisoned=False,
+                            ):
+                                continue
+                            source_benign = dict(item)
+                            source_benign.setdefault("evidence_type", "benign")
+                            source_benign.setdefault("attack_type", None)
+                            source_benign["claim_id"] = claim_id
+                            identity = (
+                                str(source_benign.get("evidence_id") or ""),
+                                str(source_benign.get("url") or ""),
+                            )
+                            if identity in existing_identities:
+                                continue
+                            documents.append(source_benign)
+                            existing_identities.add(identity)
+                    if request.include_distractors:
+                        record = self.claims._record(claim_id)
+                        environment = record.get("evidence_environment") or {}
+                        for item in environment.get("related_distractor") or []:
+                            distractor = dict(item)
+                            distractor.setdefault("evidence_type", "related_distractor")
+                            distractor.setdefault("attack_type", None)
+                            distractor["claim_id"] = claim_id
+                            documents.append(distractor)
+                            existing_identities.add((
+                                str(distractor.get("evidence_id") or ""),
+                                str(distractor.get("url") or ""),
+                            ))
                 self.retrievers[key] = EvidenceRetriever(documents=documents)
             return self.retrievers[key]
 
-
-class ClaimEvidencePool(ConditionedEvidencePool):
-    def search(self, claim_id, query, request, llm):
-        retrieved_benign = self._search(
-            self._retriever(claim_id, request),
-            query,
-            request,
-            llm,
-        )
-        return self.evidence.mix_selected_evidence(
-            claim_id,
-            retrieved_benign,
-            poison_ratio=request.poison_ratio,
-            attack_type=request.attack_type,
-            seed=request.seed,
-            poison_cache=self.poison_cache,
-            generate_missing_poison=request.generate_missing_poison,
-        )
-
-    def size(self, claim_id, request):
-        return len(self._retriever(claim_id, request).documents)
-
-    def _retriever(self, claim_id, request):
-        key = (str(claim_id), request.retrieval_data_path)
-        with self.lock:
-            if key not in self.retrievers:
-                self.retrievers[key] = EvidenceRetriever(
-                    documents=self._benign_claim_documents(claim_id, request)
-                )
-            return self.retrievers[key]
+    def _load_retrieval_metadata(self, path):
+        if not path or self.retrieval_metadata:
+            return
+        for record in read_jsonl(path):
+            claim_id = str(record.get("claim_id") or "")
+            environment = record.get("evidence_environment") or {}
+            groups = [environment.get("benign") or []]
+            groups.extend((environment.get("poisoned") or {}).values())
+            for items in groups:
+                for item in items or []:
+                    metadata = item.get("retrieval")
+                    if metadata:
+                        self.retrieval_metadata[(claim_id, str(item.get("evidence_id")))] = metadata
 
 
 class JsonlResultSink:
-    def __init__(self, path, overwrite=False):
+    def __init__(self, path, overwrite=False, rerun_missing_usage=False):
         self.path = Path(path)
         self._lock = threading.Lock()
         self.path.parent.mkdir(parents=True, exist_ok=True)
         if overwrite:
             self.path.write_text("")
-        self.completed = load_completed_keys(self.path)
+        self.completed = load_completed_keys(self.path, require_token_usage=rerun_missing_usage)
 
     def contains(self, case: EvaluationCase):
         with self._lock:
@@ -339,10 +338,12 @@ def case_key(case: EvaluationCase):
         case.evidence.attack_type,
         float(case.evidence.poison_ratio),
         case.evidence.source,
-        case.evidence.retrieval_mode if is_retrieval_source(case.evidence.source) else None,
-        case.evidence.top_k if is_retrieval_source(case.evidence.source) else None,
-        case.evidence.retrieval_candidate_k if is_retrieval_source(case.evidence.source) else None,
-        effective_pool_top_k(case.evidence) if is_retrieval_source(case.evidence.source) else None,
+        case.evidence.retrieval_mode if case.evidence.source == "global" else None,
+        case.evidence.top_k if case.evidence.source == "global" else None,
+        case.evidence.retrieval_candidate_k if case.evidence.source == "global" else None,
+        case.evidence.pool_top_k if case.evidence.source == "global" else None,
+        case.evidence.retrieval_source if case.evidence.source == "global" else None,
+        case.evidence.include_distractors if case.evidence.source == "global" else None,
     )
 
 
@@ -353,23 +354,16 @@ def row_key(row):
         row.get("attack_type"),
         float(row.get("poison_ratio", 0)),
         row.get("evidence_source", "dataset"),
-        row.get("retrieval_mode") if is_retrieval_source(row.get("evidence_source")) else None,
-        row.get("retrieval_top_k") if is_retrieval_source(row.get("evidence_source")) else None,
-        row.get("retrieval_candidate_k") if is_retrieval_source(row.get("evidence_source")) else None,
-        row.get("pool_top_k") if is_retrieval_source(row.get("evidence_source")) else None,
+        row.get("retrieval_mode") if row.get("evidence_source") == "global" else None,
+        row.get("retrieval_top_k") if row.get("evidence_source") == "global" else None,
+        row.get("retrieval_candidate_k") if row.get("evidence_source") == "global" else None,
+        row.get("pool_top_k") if row.get("evidence_source") == "global" else None,
+        row.get("retrieval_source", "web") if row.get("evidence_source") == "global" else None,
+        bool(row.get("include_distractors", False)) if row.get("evidence_source") == "global" else None,
     )
 
 
-def effective_pool_top_k(request: EvidenceRequest):
-    """Return the number of records contributed by each claim to a global pool."""
-    return request.pool_top_k if request.pool_top_k is not None else request.top_k
-
-
-def is_retrieval_source(source):
-    return source in {"local", "global"}
-
-
-def load_completed_keys(path):
+def load_completed_keys(path, require_token_usage=False):
     if not path.exists():
         return set()
     completed = set()
@@ -387,6 +381,9 @@ def load_completed_keys(path):
                 dirty = True
                 continue
             if row.get("status") != "done":
+                dirty = True
+                continue
+            if require_token_usage and int((row.get("overall_usage") or {}).get("total_tokens", 0) or 0) <= 0:
                 dirty = True
                 continue
             valid_lines.append(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n")

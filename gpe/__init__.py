@@ -1,4 +1,7 @@
+__version__ = "0.2.1"
+
 __all__ = [
+    "__version__",
     "GPE",
     "EvaluationCase",
     "EvaluationPipeline",
@@ -6,6 +9,10 @@ __all__ = [
     "JsonlResultSink",
     "GPEKnowledgeGraph",
     "EvidenceRetriever",
+    "ClaimLoader",
+    "DatasetEvidenceLoader",
+    "list_source_scopes",
+    "public_evidence_view",
 ]
 
 
@@ -32,4 +39,13 @@ def __getattr__(name):
     if name == "EvidenceRetriever":
         from gpe.retrieval.evidence_retrieval import EvidenceRetriever
         return EvidenceRetriever
+    if name in {"ClaimLoader", "DatasetEvidenceLoader"}:
+        from gpe.dataloader import ClaimLoader, DatasetEvidenceLoader
+        return {"ClaimLoader": ClaimLoader, "DatasetEvidenceLoader": DatasetEvidenceLoader}[name]
+    if name in {"list_source_scopes", "public_evidence_view"}:
+        from gpe.retrieval.source_scope import list_source_scopes, public_evidence_view
+        return {
+            "list_source_scopes": list_source_scopes,
+            "public_evidence_view": public_evidence_view,
+        }[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

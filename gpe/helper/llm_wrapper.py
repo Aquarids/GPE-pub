@@ -143,6 +143,9 @@ class LLMWrapper:
             "error code: 500" in text
             or "'code': 500" in text
             or '"code": 500' in text
+            or "error code: 429" in text
+            or "rate limit" in text
+            or "too many requests" in text
             or "network unstable" in text
             or "timeout" in text
             or "temporarily unavailable" in text

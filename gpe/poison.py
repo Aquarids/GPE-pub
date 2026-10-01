@@ -1,6 +1,7 @@
 import hashlib
 import json
 import re
+import threading
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -16,6 +17,7 @@ POISON_DOMAIN_PREFIXES = [
 
 POISON_TLDS = ["com", "net", "news", "co", "today"]
 ATTACK_NAMES = ("fakegpt", "poisonedrag", "ata", "ignore")
+_POISON_WRITE_LOCK = threading.Lock()
 
 
 def default_dynamic_poison_paths():
@@ -56,7 +58,15 @@ def normalize_poison_paths(value):
 
 
 class PoisonCache:
-    def __init__(self, path, dynamic_path=None, llm=None, logger=None):
+    def __init__(
+        self,
+        path,
+        dynamic_path=None,
+        llm=None,
+        logger=None,
+        before_generate=None,
+        generation_batch_size=1,
+    ):
         if logger is None and llm is not None:
             from gpe.helper.logger import ENV_LOCAL, Logger
 
@@ -69,6 +79,8 @@ class PoisonCache:
         )
         self.llm = llm
         self.logger = logger
+        self.before_generate = before_generate
+        self.generation_batch_size = max(1, int(generation_batch_size))
         self.records = []
         self.by_claim_id = {}
         self.indexed_ids = set()
@@ -154,51 +166,80 @@ class PoisonCache:
 
     def _generate_batch(self, claim, attack_type, count, benign, existing):
         attack = build_attack(attack_type, self.llm, self.logger)
-        generated = attack.generate_poison_contents(
-            query=claim["original_claim"],
-            label=claim["ground_truth"],
-            n_content=count,
-            category=claim.get("category"),
-        )
-        if len(generated) != count:
-            raise RuntimeError(
-                f"{attack_type} generated {len(generated)} items for {claim['claim_id']}; expected {count}"
-            )
         start = len(existing) + 1
         references = list(benign) or [{}]
-        for offset, item in enumerate(generated):
-            index = start + offset
-            evidence_id = generated_id(attack_type, claim["claim_id"], index)
-            reference = references[(index - 1) % len(references)]
-            self._append(build_record(claim, attack_type, item, evidence_id, domain_reference=reference))
-
-    def _generate_ata(self, claim, sources):
-        attack = build_attack("ata", self.llm, self.logger)
-        for index, source in enumerate(sources, start=1):
-            source_id = source.get("evidence_id") or f"index-{index:04d}"
-            evidence_id = generated_id("ata", claim["claim_id"], index, source)
-            reference_content = normalize_content(source.get("contents"))
+        total = start + count - 1
+        for batch_start in range(start, total + 1, self.generation_batch_size):
+            batch_count = min(self.generation_batch_size, total - batch_start + 1)
+            if self.before_generate is not None:
+                self.before_generate()
             generated = attack.generate_poison_contents(
                 query=claim["original_claim"],
                 label=claim["ground_truth"],
-                n_content=1,
+                n_content=batch_count,
                 category=claim.get("category"),
-                extra={"reference_content": reference_content},
+                extra={"start_index": batch_start, "total": total},
             )
-            if len(generated) != 1:
+            if len(generated) != batch_count:
                 raise RuntimeError(
-                    f"ata generated {len(generated)} items for {claim['claim_id']}:{source_id}; expected 1"
+                    f"{attack_type} generated {len(generated)} items for "
+                    f"{claim['claim_id']} record={batch_start}; expected {batch_count}"
                 )
-            self._append(
-                build_record(
-                    claim,
-                    "ata",
-                    generated[0],
-                    evidence_id,
-                    source_evidence_id=source_id,
-                    domain_reference=source,
+            for offset, item in enumerate(generated):
+                index = batch_start + offset
+                evidence_id = generated_id(attack_type, claim["claim_id"], index)
+                reference = references[(index - 1) % len(references)]
+                self._append(
+                    build_record(
+                        claim,
+                        attack_type,
+                        item,
+                        evidence_id,
+                        domain_reference=reference,
+                    )
                 )
-            )
+
+    def _generate_ata(self, claim, sources):
+        attack = build_attack("ata", self.llm, self.logger)
+        for batch_start in range(0, len(sources), self.generation_batch_size):
+            batch_sources = sources[batch_start:batch_start + self.generation_batch_size]
+            if self.before_generate is not None:
+                self.before_generate()
+            if len(batch_sources) == 1:
+                source = batch_sources[0]
+                reference_content = normalize_content(source.get("contents"))
+                generated = attack.generate_poison_contents(
+                    query=claim["original_claim"],
+                    label=claim["ground_truth"],
+                    n_content=1,
+                    category=claim.get("category"),
+                    extra={"reference_content": reference_content},
+                )
+            else:
+                generated = attack.generate_poison_for_sources(
+                    query=claim["original_claim"],
+                    label=claim["ground_truth"],
+                    sources=batch_sources,
+                    category=claim.get("category"),
+                )
+            if len(generated) != len(batch_sources):
+                raise RuntimeError(
+                    f"ata generated {len(generated)} items for {claim['claim_id']}; "
+                    f"expected {len(batch_sources)}"
+                )
+            for source, item in zip(batch_sources, generated):
+                source_id = source.get("evidence_id") or f"index-{batch_start + 1:04d}"
+                evidence_id = generated_id("ata", claim["claim_id"], batch_start + 1, source)
+                self._append(
+                    build_record(
+                        claim,
+                        "ata",
+                        item,
+                        evidence_id,
+                        source_evidence_id=source_id,
+                        domain_reference=source,
+                    )
+                )
 
     def _append(self, record):
         attack_type = normalize_attack_type(record.get("attack_type"))
@@ -209,10 +250,11 @@ class PoisonCache:
             )
         record = dict(record)
         record["poison_origin"] = "dynamic"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("a", encoding="utf-8") as file:
-            file.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
-            file.flush()
+        with _POISON_WRITE_LOCK:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("a", encoding="utf-8") as file:
+                file.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
+                file.flush()
         self._index(record, origin="dynamic")
 
     def _index(self, record, origin=None):
@@ -296,6 +338,7 @@ def build_record(
         "summary": content[:300],
         "url": f"https://{domain}/{slugify(generated.get('name') or title)}",
         "source_name": poisoned_source_name(claim, generated),
+        "source_scope": "attacker",
         "locale": "global",
         "author": normalize_content(generated.get("author")),
         "published_at": normalize_content(
@@ -311,6 +354,9 @@ def build_record(
         record["simulated_reference_host"] = reference_host
     if source_evidence_id:
         record["source_evidence_id"] = str(source_evidence_id)
+    from gpe.retrieval.source_scope import fixed_publication_variants
+
+    record["publication_variants"] = fixed_publication_variants(record)
     return record
 
 
